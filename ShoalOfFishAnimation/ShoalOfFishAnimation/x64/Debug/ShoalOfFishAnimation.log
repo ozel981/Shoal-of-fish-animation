@@ -1,10 +1,4 @@
 ﻿  openGLwindow.cpp
-d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fishmodel\fishmodel.h(14): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fishmodel\fishmodel.h(15): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fishmodel\fishmodel.h(16): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fishmodel\fishmodel.h(20): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fishmodel\fishmodel.h(21): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fishmodel\fishmodel.h(22): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
   ShoalOfFishAnimation.vcxproj -> D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\x64\Debug\ShoalOfFishAnimation.exe
   ShoalOfFishAnimation.vcxproj -> D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\x64\Debug\ShoalOfFishAnimation.pdb (Full PDB)
   copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\bin\cudart*.dll" "D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\x64\Debug\"

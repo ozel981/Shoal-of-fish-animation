@@ -8,10 +8,13 @@
 
 int TopAndBottomLimit(float, float, float);
 
-Fish::Fish(float x, float y)
+Fish::Fish(float x, float y, float direction)
 {
 	this->X = x;
 	this->Y = y;
+	this->direction = direction;
+	this->target_X = TargetPoint_X();
+	this->target_Y = TargetPoint_Y();
 }
 
 float Fish::NewPositonDependsOnDirection_X(float x, float y)
@@ -39,31 +42,32 @@ void Fish::Draw()
 void Fish::Move()
 {
 	if (X > MATRIX_HALF_WIDTH || X < -MATRIX_HALF_WIDTH || Y > MATRIX_HALF_HEIGHT || Y < -MATRIX_HALF_HEIGHT) return;
-	
-	for (int i = 0; i < 10; i++)
-	{
-
-		if (direction >= 0 && direction < 30) Y++;
-		else if (direction >= 30 && direction < 60) { X--; Y++; }
-		else if (direction >= 60 && direction < 120) { X--; }
-		else if (direction >= 120 && direction < 150) { X--; Y--; }
-		else if (direction >= 150 && direction < 210) { Y--; }
-		else if (direction >= 210 && direction < 240) { Y--; X++; }
-		else if (direction >= 240 && direction < 300) { X++; }
-		else if (direction >= 300 && direction < 330) { X++; Y++; }
-		else if (direction >= 330 && direction < 360) { Y++; }
-	}
-
-
-
-	printf("%f -> ", direction);
-	direction = GetDirectionToPoint(TargetPoint_X(), TargetPoint_Y());
-	printf("%f \n", direction);
+	float dx = target_X - X;
+	float dy = target_Y - Y;
+	float l = sqrt(dx * dx + dy * dy);
+	dx = dx / l;
+	dy = dy / l;
+	X += dx;
+	Y += dy;
 }
 
-void Fish::SetDegree(float direction)
+void Fish::SetDirection(float degree)
 {
-	this->direction = ((int)direction % 360);
+	if (degree >= 360)
+	{
+		this->direction = degree - 360.0;
+	}
+	else
+	{
+		this->direction = degree;
+	}
+	target_X = TargetPoint_X();
+	target_Y = TargetPoint_Y();
+}
+
+float Fish::GetDirection()
+{
+	return direction;
 }
 
 void Fish::ReactToNearbyFishes(Fish* fishes, int count)
@@ -127,7 +131,6 @@ float Fish::TargetPoint_X()
 	}
 	if (direction >= 90 && direction < 180)
 	{
-		//return tan(DegreeToRadians(direction));
 		return std::max(-MATRIX_HALF_WIDTH, X - (Y + MATRIX_HALF_HEIGHT)*-tan(DegreeToRadians(direction)));
 	}
 	if (direction >= 180 && direction < 270)
@@ -136,11 +139,9 @@ float Fish::TargetPoint_X()
 	}
 	if (direction >= 270 && direction < 360)
 	{
-		//return tan(DegreeToRadians(direction));
 		return std::min(MATRIX_HALF_WIDTH, X + (MATRIX_HALF_HEIGHT - Y)*-tan(DegreeToRadians(direction)));
 	}
 	return 0;
-	//return X-((tan(DegreeToRadians(direction))*(MATRIX_HALF_HEIGHT)) * (direction > 90 && direction < 270 ? -1 : 1));
 }
 
 float Fish::TargetPoint_Y()
@@ -153,22 +154,18 @@ float Fish::TargetPoint_Y()
 	if (direction == 180) return -MATRIX_HALF_HEIGHT;
 	if (direction >= 0 && direction < 90)
 	{
-		//return tan(DegreeToRadians((90.0 - direction)));
 		return std::min(MATRIX_HALF_HEIGHT, Y + (X + MATRIX_HALF_WIDTH)*tan(DegreeToRadians((90.0-direction))));
 	}
 	if (direction >= 90 && direction < 180)
 	{
-		//return tan(DegreeToRadians((90.0 - direction)));
 		return std::max(-MATRIX_HALF_HEIGHT, Y + (X + MATRIX_HALF_WIDTH)*tan(DegreeToRadians((90.0 - direction))));
 	}
 	if (direction >= 180 && direction < 270)
 	{
-		//return tan(DegreeToRadians((direction)));
 		return std::max(-MATRIX_HALF_HEIGHT, Y - (MATRIX_HALF_WIDTH - X)*tan(DegreeToRadians((90.0-direction))));
 	}
 	if (direction >= 270 && direction < 360)
 	{
-		//return tan(DegreeToRadians((90.0 - direction)));
 		return std::min(MATRIX_HALF_HEIGHT, Y + (MATRIX_HALF_WIDTH - X)*-tan(DegreeToRadians((90.0 - direction))));
 	}
 	return 0;

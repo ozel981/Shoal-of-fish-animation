@@ -13,7 +13,7 @@ float x_position = -10;
 bool rightDirection = 1;
 
 bool moveAllow = true;
-Fish Fishs[FISH_COUNT] = { Fish(-250,-250),Fish(-125,-125),Fish(0,0),Fish(100,100),Fish(200,200),Fish(250,250) };
+Fish Fishs[FISH_COUNT] = { Fish(-250,-250,355),Fish(-125,-125, 15),Fish(0,0,225),Fish(100,100,170),Fish(200,200,90),Fish(250,250, 200) };
 
 void Display();
 void Timer(int);
@@ -23,14 +23,6 @@ void KeyboardInput(unsigned char, int, int);
 
 int DisplayWindow()
 {
-	/*float kat = 67.9865;
-	for (int i = 0; i < 1000; i++)
-	{
-		printf("xd: %f\n", kat);
-		float x = tan(DegreeToRadians(kat));
-		kat = RadiansToDegree(atan(x));
-	}*/
-
 	int argc = 1;
 	char* argv[1] = { "shoal-of-fish" };
 
@@ -64,8 +56,7 @@ void Display()
 	{
 		Fish.Draw();
 	}
-	//printf("%f:  %f\n", Fishs[0].direction,Fishs[0].GetDirectionToPoint(Fishs[0].TargetPoint_X(),Fishs[0].TargetPoint_Y()));
-	printf("%f : %f \n", Fishs[0].TargetPoint_X(), Fishs[0].TargetPoint_Y());
+	//printf("%f : %f \n", Fishs[0].TargetPoint_X(), Fishs[0].TargetPoint_Y());
 	glutSwapBuffers();
 }
 
@@ -76,9 +67,11 @@ void Timer(int)
 
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
-		//Fishs[i].Move(6, -(MATRIX_HEIGHT / 2), (MATRIX_HEIGHT / 2));
-		
+
+		Fishs[i].SetDirection(Fishs[i].GetDirection() + 1);
+		//printf("%f : %f", Fishs[i].target_X, Fishs[i].target_Y);
 		Fishs[i].Move();
+		
 		//Fishs[i].SetDegree(Fishs[i].direction + 1);
 	}
 

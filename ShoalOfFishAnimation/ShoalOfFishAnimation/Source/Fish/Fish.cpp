@@ -83,31 +83,50 @@ int Fish::ReactToNearbyFishes(Fish* fishes, int count)
 {
 	float avarageDirection = direction <= 180 ? direction : direction - 360;
 	int n = 1;
-	float avg_x = X;
-	float avg_y = Y;
+	float avarage_X = X;
+	float avarage_Y = Y;
+	float avarageDiversion_X = 0;
+	float avarageDiversion_Y = 0;
 	for (int i = 0; i < count; i++)
 	{
 		float x = fishes[i].X;
 		float y = fishes[i].Y;
 		if (x == X && y == Y) continue;
-		if (sqrt((X - x)*(X - x) + (Y - y)*(Y - y)) < 50.0)
+		if (sqrt((X - x)*(X - x) + (Y - y)*(Y - y)) < FISH_VIEW_RANGE)
 		{
+			//avarageDiversion_X += X - x;
+			//avarageDiversion_X += X - x;
+			float a_x = (X - x);
+			float a_y = (Y - y);
+			float l = sqrt(a_x*a_x + a_y * a_y);
+			a_x /= l;
+			a_y /= l;
+			a_x *= (FISH_VIEW_RANGE - l);
+			a_y *= (FISH_VIEW_RANGE - l);
+			avarageDiversion_X += a_x;
+			avarageDiversion_Y += a_y;
 			avarageDirection += (fishes[i].GetDirection() <= 180 ? fishes[i].GetDirection() : fishes[i].GetDirection() - 360);
 			n++;
-			avg_x += x;
-			avg_y += y;
+			avarage_X += x;
+			avarage_Y += y;
 		}
 	}
 	if (n > 1)
 	{
-		avg_x /= n;
-		avg_y /= n;
-		float val = GetDirectionToPoint(avg_x, avg_y);
-		val = val <= 180 ? val : val - 360;
+		avarage_X /= n;
+		avarage_Y /= n;
+		float midPointDirection = GetDirectionToPoint(avarage_X, avarage_Y);
+		midPointDirection = midPointDirection <= 180 ? midPointDirection : midPointDirection - 360;
 		
-		avarageDirection /= (n);
-		avarageDirection += val;
-		avarageDirection /= 2;
+		avarageDiversion_X /= (n - 1);
+		avarageDiversion_Y /= (n - 1);
+		float antDiversionDirecion = GetDirectionToPoint(X + avarageDiversion_X, Y + avarageDiversion_Y);
+		antDiversionDirecion = antDiversionDirecion <= 180 ? antDiversionDirecion : antDiversionDirecion - 360;
+
+		//avarageDirection /= (n);
+		avarageDirection += midPointDirection;
+		avarageDirection += antDiversionDirecion;
+		avarageDirection /= (n + 2);
 		if (avarageDirection < 0) return 360 + avarageDirection;
 		else return avarageDirection;
 	}
@@ -206,7 +225,7 @@ float Fish::TargetPoint_Y()
 	return 0;
 }
 
-int TopAndBottomLimit60(float value, float topLimit, float downLimit)
+int TopAndBottomLimit(float value, float topLimit, float downLimit)
 {
 	return std::max(downLimit, std::min(topLimit, value));
 }

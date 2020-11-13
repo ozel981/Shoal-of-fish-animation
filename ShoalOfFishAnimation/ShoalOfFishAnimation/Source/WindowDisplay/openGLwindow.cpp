@@ -4,13 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <math.h>
-#include "../FishModel/fishModel.h"
-
-#define RADPERDEG 0.0174533
-
-#define FISH_COUNT 6
-#define MATRIX_WIDTH 600
-#define MATRIX_HEIGHT 600
+#include "../Fish/Fish.h"
+#include "../Constant/Costant.h"
 
 #pragma comment (lib, "glew32s.lib")
 
@@ -18,7 +13,7 @@ float x_position = -10;
 bool rightDirection = 1;
 
 bool moveAllow = true;
-FishModel fishModels[FISH_COUNT] = { FishModel(-250,-250),FishModel(-125,-125),FishModel(0,0),FishModel(100,100),FishModel(200,200),FishModel(250,250) };
+Fish Fishs[FISH_COUNT] = { Fish(-250,-250),Fish(-125,-125),Fish(0,0),Fish(100,100),Fish(200,200),Fish(250,250) };
 
 void Display();
 void Timer(int);
@@ -28,6 +23,14 @@ void KeyboardInput(unsigned char, int, int);
 
 int DisplayWindow()
 {
+	/*float kat = 67.9865;
+	for (int i = 0; i < 1000; i++)
+	{
+		printf("xd: %f\n", kat);
+		float x = tan(DegreeToRadians(kat));
+		kat = RadiansToDegree(atan(x));
+	}*/
+
 	int argc = 1;
 	char* argv[1] = { "shoal-of-fish" };
 
@@ -57,32 +60,26 @@ void Display()
 
 	// draw
 
-	for each (FishModel fishModel in fishModels)
+	for each (Fish Fish in Fishs)
 	{
-		fishModel.Draw();
+		Fish.Draw();
 	}
-	/*printf("%d : ", fishModels[0].X);
-	printf("%d\n", fishModels[0].Y);
-	printf("%d : ", fishModels[0].x_position(fishModels[0].X, fishModels[0].Y + 12));
-	printf("%d\n", fishModels[0].y_position(fishModels[0].X, fishModels[0].Y + 12));
-	printf("%d : ", fishModels[0].x_position(fishModels[0].X - 6, fishModels[0].Y - 4));
-	printf("%d\n", fishModels[0].y_position(fishModels[0].X - 6, fishModels[0].Y - 4));
-	printf("%d : ", fishModels[0].x_position(fishModels[0].X + 6, fishModels[0].Y - 4));
-	printf("%d\n", fishModels[0].y_position(fishModels[0].X + 6, fishModels[0].Y - 4));
-	printf("-----------------------------------------------------------------------\n");
-	*/
+	//printf("%f:  %f\n", Fishs[0].direction,Fishs[0].GetDirectionToPoint(Fishs[0].TargetPoint_X(),Fishs[0].TargetPoint_Y()));
+	printf("%f : %f \n", Fishs[0].TargetPoint_X(), Fishs[0].TargetPoint_Y());
 	glutSwapBuffers();
 }
 
 void Timer(int)
 {
 	glutPostRedisplay();
-	if(moveAllow)glutTimerFunc(1000 / 30, Timer, 0);
+	if(moveAllow) glutTimerFunc(1000 / 30, Timer, 0);
 
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
-		//fishModels[i].Move(6, -(MATRIX_HEIGHT / 2), (MATRIX_HEIGHT / 2));
-		fishModels[i].SetDegree(fishModels[i].degree + 1);
+		//Fishs[i].Move(6, -(MATRIX_HEIGHT / 2), (MATRIX_HEIGHT / 2));
+		
+		Fishs[i].Move();
+		//Fishs[i].SetDegree(Fishs[i].direction + 1);
 	}
 
 }
@@ -97,7 +94,7 @@ void Reshape(int width, int height)
 	glViewport(0, 0, (GLsizei)width, (GLsizei)height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(-(MATRIX_WIDTH / 2), (MATRIX_WIDTH / 2), -(MATRIX_HEIGHT / 2), (MATRIX_HEIGHT / 2));
+	gluOrtho2D(-(MATRIX_HALF_WIDTH), (MATRIX_HALF_WIDTH), -(MATRIX_HALF_HEIGHT), (MATRIX_HALF_HEIGHT));
 	glMatrixMode(GL_MODELVIEW);
 }
 

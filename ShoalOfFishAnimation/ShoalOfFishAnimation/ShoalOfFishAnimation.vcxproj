@@ -99,11 +99,12 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="Source\Main\main.cu" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\FishModel\fishModel.h" />
+    <ClInclude Include="Source\Constant\Costant.h" />
+    <ClInclude Include="Source\Fish\Fish.h" />
     <ClInclude Include="Source\WindowDisplay\openGLwindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\FishModel\fishModel.cpp" />
+    <ClCompile Include="Source\Fish\Fish.cpp" />
     <ClCompile Include="Source\WindowDisplay\openGLwindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

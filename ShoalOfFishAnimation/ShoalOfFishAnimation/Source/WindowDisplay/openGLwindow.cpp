@@ -6,6 +6,7 @@
 #include <math.h>
 #include "../Fish/Fish.h"
 #include "../Constant/Costant.h"
+#include <time.h>
 
 #pragma comment (lib, "glew32s.lib")
 
@@ -13,7 +14,7 @@ float x_position = -10;
 bool rightDirection = 1;
 
 bool moveAllow = true;
-Fish Fishs[FISH_COUNT] = { Fish(-250,-250,355),Fish(-125,-125, 15),Fish(0,0,225),Fish(100,100,170),Fish(200,200,90),Fish(250,250, 200) };
+Fish Fishs[FISH_COUNT];
 
 void Display();
 void Timer(int);
@@ -23,6 +24,26 @@ void KeyboardInput(unsigned char, int, int);
 
 int DisplayWindow()
 {
+	srand(time(NULL));
+	for (int i = 0; i < FISH_COUNT; i++)
+	{
+		Fishs[i] = Fish(300 - rand() % 600, 300 - rand() % 600, rand() % 360);
+	}
+	/*for (int i = 0; i < 600; i++)
+	{
+		Fishs[FISH_COUNT + i] = Fish(-300, -300 + i,270.0);
+		Fishs[FISH_COUNT + 600 + i] = Fish(300, -300 + i, 90.0);
+		Fishs[FISH_COUNT + 1200 + i] = Fish(-300 + i, -300, 0.0);
+		Fishs[FISH_COUNT + 1800 + i] = Fish(-300 + i, 300, 180.0);
+	}*/
+	/*printf("%f x %f\n", Fishs[0].X, Fishs[0].Y);
+	for (int i = 0; i <= 360; i++)
+	{
+		float x = 100 * cos(DegreeToRadians(i)) + 100;
+		float y = 100 * sin(DegreeToRadians(i)) - 100;
+		printf("%f x %f -> %f\n",x,y, Fishs[0].GetDirectionToPoint(x, y));
+	}*/
+
 	int argc = 1;
 	char* argv[1] = { "shoal-of-fish" };
 
@@ -52,11 +73,11 @@ void Display()
 
 	// draw
 
-	for each (Fish Fish in Fishs)
+	for (int i = 0; i < FISH_COUNT; i++)
 	{
-		Fish.Draw();
+		Fishs[i].Draw();
 	}
-	//printf("%f : %f \n", Fishs[0].TargetPoint_X(), Fishs[0].TargetPoint_Y());
+
 	glutSwapBuffers();
 }
 
@@ -64,16 +85,17 @@ void Timer(int)
 {
 	glutPostRedisplay();
 	if(moveAllow) glutTimerFunc(1000 / 30, Timer, 0);
-
+	float fishes[FISH_COUNT];
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
-
-		Fishs[i].SetDirection(Fishs[i].GetDirection() + 1);
-		//printf("%f : %f", Fishs[i].target_X, Fishs[i].target_Y);
-		Fishs[i].Move();
-		
-		//Fishs[i].SetDegree(Fishs[i].direction + 1);
+		fishes[i] = Fishs[i].ReactToNearbyFishes(Fishs, FISH_COUNT);
 	}
+	for (int i = 0; i < FISH_COUNT; i++)
+	{
+		Fishs[i].SetDirection(fishes[i]);
+		Fishs[i].Move();
+	}
+	moveAllow = false;
 
 }
 

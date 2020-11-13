@@ -1,4 +1,30 @@
 ﻿  openGLwindow.cpp
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\windowdisplay\openglwindow.cpp(27): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\windowdisplay\openglwindow.cpp(30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\windowdisplay\openglwindow.cpp(91): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  Generating Code...
+  Compiling...
+  Fish.cpp
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(30): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(35): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(67): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(111): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(112): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(114): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(137): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(141): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(145): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(149): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(165): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(169): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(173): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(177): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(192): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(196): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(200): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(204): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\fish.cpp(211): warning C4244: 'return': conversion from 'const float' to 'int', possible loss of data
+  Generating Code...
   ShoalOfFishAnimation.vcxproj -> D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\x64\Debug\ShoalOfFishAnimation.exe
   ShoalOfFishAnimation.vcxproj -> D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\x64\Debug\ShoalOfFishAnimation.pdb (Full PDB)
   copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\bin\cudart*.dll" "D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\x64\Debug\"

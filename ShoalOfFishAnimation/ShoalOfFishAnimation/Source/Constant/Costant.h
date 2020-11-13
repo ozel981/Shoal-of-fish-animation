@@ -2,7 +2,7 @@
 
 #pragma region Matrix
 
-#define FISH_COUNT 6
+#define FISH_COUNT 50
 #define MATRIX_HALF_WIDTH 300.0
 #define MATRIX_HALF_HEIGHT 300.0
 

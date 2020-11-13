@@ -16,6 +16,14 @@ Fish::Fish(float x, float y, float direction)
 	this->target_X = TargetPoint_X();
 	this->target_Y = TargetPoint_Y();
 }
+Fish::Fish()
+{ 
+	this->X = 0;
+	this->Y = 0;
+	this->direction = 0;
+	this->target_X = TargetPoint_X();
+	this->target_Y = TargetPoint_Y();
+}
 
 float Fish::NewPositonDependsOnDirection_X(float x, float y)
 {
@@ -53,6 +61,7 @@ void Fish::Move()
 
 void Fish::SetDirection(float degree)
 {
+	if (direction == degree) return;
 	if (degree >= 360)
 	{
 		this->direction = degree - 360.0;
@@ -70,48 +79,74 @@ float Fish::GetDirection()
 	return direction;
 }
 
-void Fish::ReactToNearbyFishes(Fish* fishes, int count)
+int Fish::ReactToNearbyFishes(Fish* fishes, int count)
 {
+	float avarageDirection = direction <= 180 ? direction : direction - 360;
+	int n = 1;
+	float avg_x = X;
+	float avg_y = Y;
 	for (int i = 0; i < count; i++)
 	{
 		float x = fishes[i].X;
 		float y = fishes[i].Y;
-		if ((X - x)*(X - x) + (Y - y)*(Y - y) < 100);
+		if (x == X && y == Y) continue;
+		if (sqrt((X - x)*(X - x) + (Y - y)*(Y - y)) < 50.0)
 		{
-			// TODO : write reaction
+			avarageDirection += (fishes[i].GetDirection() <= 180 ? fishes[i].GetDirection() : fishes[i].GetDirection() - 360);
+			n++;
+			avg_x += x;
+			avg_y += y;
 		}
 	}
+	if (n > 1)
+	{
+		avg_x /= n;
+		avg_y /= n;
+		float val = GetDirectionToPoint(avg_x, avg_y);
+		val = val <= 180 ? val : val - 360;
+		
+		avarageDirection /= (n);
+		avarageDirection += val;
+		avarageDirection /= 2;
+		if (avarageDirection < 0) return 360 + avarageDirection;
+		else return avarageDirection;
+	}
+	return direction;
+}
+
+void Fish::Uloada()
+{
+	if (uploada)SetDirection(GetDirectionToPoint(d_x, d_y));
+	uploada = false;
 }
 
 float Fish::GetDirectionToPoint(float x, float y)
 {
-	if (Y - y == 0)
+	if ( Y - y == 0)
 	{
 		if (x > X) return 270;
 		else return 90;
 	}
-	if (direction > 90 && direction < 270)
+	if (round(X - x) == 0)
 	{
-		if (direction >= 0 && direction < 180)
-		{
-			return 180 - RadiansToDegree(atan((x - X) / (y - Y)));
-		}
-		else
-		{
-			return 180 - RadiansToDegree(atan((x - X) / (y - Y)));
-		}
+		if (y > Y) return 0;
+		else return 180;
+	}
+	if (x > X && y > Y)
+	{
+		return 360 - RadiansToDegree(atan((x - X) / (y - Y)));
+	}
+	else if (x <= X && y > Y)
+	{
+		return -RadiansToDegree(atan((x - X) / (y - Y)));
+	}
+	else if (x <= X && y <= Y)
+	{
+		return 180 - RadiansToDegree(atan((x - X) / (y - Y)));
 	}
 	else
 	{
-		if (direction >= 0 && direction < 180)
-		{
-			return  -RadiansToDegree(atan((x - X) / (y - Y)));
-		}
-		else
-		{
-			return 360 - RadiansToDegree(atan((x - X) / (y - Y)));
-		}
-
+		return 180 - RadiansToDegree(atan((x - X) / (y - Y)));
 	}
 }
 
@@ -171,7 +206,7 @@ float Fish::TargetPoint_Y()
 	return 0;
 }
 
-int TopAndBottomLimit(float value, float topLimit, float downLimit)
+int TopAndBottomLimit60(float value, float topLimit, float downLimit)
 {
 	return std::max(downLimit, std::min(topLimit, value));
 }

@@ -2,18 +2,19 @@
 
 #pragma region Matrix
 
-#define FISH_COUNT 100
-#define MATRIX_HALF_WIDTH 1000.0
-#define MATRIX_HALF_HEIGHT 1000.0
-#define FISH_VIEW_RANGE 50.0
+#define MATRIX_HALF_WIDTH 300.0
+#define MATRIX_HALF_HEIGHT 300.0
 
 #pragma endregion
 
 #pragma region Fish
 
+#define FISH_COUNT 20
 #define FISH_SIDE_THICKNESS 6.0
 #define FISH_FRON_LENGTH 12.0
 #define FISH_BACK_LENGTH 4.0
+#define FISH_VIEW_RANGE 300.0
+#define FISH_COLISION_RANGE 10.0
 
 #pragma endregion
 

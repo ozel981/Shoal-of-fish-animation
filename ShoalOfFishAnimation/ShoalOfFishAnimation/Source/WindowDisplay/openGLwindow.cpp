@@ -27,7 +27,10 @@ int DisplayWindow()
 	srand(time(NULL));
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
-		Fishs[i] = Fish(300 - rand() % 600, 300 - rand() % 600, rand() % 360);
+		float x = MATRIX_HALF_WIDTH - (float)(rand() % (int)(2 * MATRIX_HALF_WIDTH));
+		float y = MATRIX_HALF_HEIGHT - (float)(rand() % (int)(2 * MATRIX_HALF_HEIGHT));
+		//printf("%d: %f x %f\n",i, x, y);
+		Fishs[i] = Fish(Point(x,y), rand() % 360);
 	}
 	/*for (int i = 0; i < 600; i++)
 	{
@@ -86,14 +89,27 @@ void Timer(int)
 	glutPostRedisplay();
 	if(moveAllow) glutTimerFunc(1000 / 30, Timer, 0);
 	float fishes[FISH_COUNT];
+	Vector vectors[FISH_COUNT];
+	/*for (int i = 0; i < FISH_COUNT; i++)
+	{
+		fishes[i] = Fishs[i].SteerTowardsTheAverageHeadingOfLocalFlockmates(Fishs, FISH_COUNT);
+	}*/
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
-		fishes[i] = Fishs[i].ReactToNearbyFishes(Fishs, FISH_COUNT);
+		vectors[i] = Fishs[i].VectorToTheAveragePositionOfLocalFlockmates(Fishs, FISH_COUNT);
 	}
+
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
-		Fishs[i].SetDirection(fishes[i]);
-		Fishs[i].Move();
+		/*Fishs[i].SetDirection(fishes[i]);
+		Fishs[i].Move();*/
+		if (Fishs[i].DetectColisionWithFlockmates(Fishs, FISH_COUNT, vectors[i]))
+		{
+
+			Fishs[i].MoveBy(vectors[i]);
+		}
+
+		//printf("%d: %f x %f\n", i, Fishs[i].Position.X, Fishs[i].Position.Y);
 	}
 	moveAllow = false;
 

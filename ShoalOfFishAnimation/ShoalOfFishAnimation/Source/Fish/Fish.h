@@ -25,6 +25,7 @@ public:
 public:
 	void Draw();
 	void Move();
+	void MoveTo(Point point);
 	void MoveBy(Vector vector);
 	void SetDirection(float degree);  // 0-up 180-down 90-left 270-right 
 	float GetDirection(); // 0-up 180-down 90-left 270-right 

@@ -2,8 +2,8 @@
 
 #pragma region Matrix
 
-#define MATRIX_HALF_WIDTH 300.0
-#define MATRIX_HALF_HEIGHT 300.0
+#define MATRIX_HALF_WIDTH 500.0
+#define MATRIX_HALF_HEIGHT 500.0
 
 #pragma endregion
 
@@ -13,7 +13,7 @@
 #define FISH_SIDE_THICKNESS 6.0
 #define FISH_FRON_LENGTH 12.0
 #define FISH_BACK_LENGTH 4.0
-#define FISH_VIEW_RANGE 300.0
+#define FISH_VIEW_RANGE 100.0
 #define FISH_COLISION_RANGE 10.0
 
 #pragma endregion

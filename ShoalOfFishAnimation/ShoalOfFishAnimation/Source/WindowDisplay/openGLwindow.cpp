@@ -90,10 +90,10 @@ void Timer(int)
 	if(moveAllow) glutTimerFunc(1000 / 30, Timer, 0);
 	float fishes[FISH_COUNT];
 	Vector vectors[FISH_COUNT];
-	/*for (int i = 0; i < FISH_COUNT; i++)
+	for (int i = 0; i < FISH_COUNT; i++)
 	{
 		fishes[i] = Fishs[i].SteerTowardsTheAverageHeadingOfLocalFlockmates(Fishs, FISH_COUNT);
-	}*/
+	}
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
 		vectors[i] = Fishs[i].VectorToTheAveragePositionOfLocalFlockmates(Fishs, FISH_COUNT);
@@ -101,16 +101,18 @@ void Timer(int)
 
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
-		/*Fishs[i].SetDirection(fishes[i]);
-		Fishs[i].Move();*/
 		if (Fishs[i].DetectColisionWithFlockmates(Fishs, FISH_COUNT, vectors[i]))
 		{
 
-			Fishs[i].MoveBy(vectors[i]);
+			Fishs[i].MoveBy(vectors[i]*0.3);
 		}
-
-		//printf("%d: %f x %f\n", i, Fishs[i].Position.X, Fishs[i].Position.Y);
 	}
+	for (int i = 0; i < FISH_COUNT; i++)
+	{
+		Fishs[i].SetDirection(fishes[i]);
+		Fishs[i].Move();
+	}
+
 	moveAllow = false;
 
 }

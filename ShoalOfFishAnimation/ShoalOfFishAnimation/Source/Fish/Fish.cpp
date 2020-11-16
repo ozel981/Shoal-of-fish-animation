@@ -5,6 +5,7 @@
 #include <algorithm> 
 #include <math.h>
 #include "../Constant/Costant.h"
+#include "../Point/Point.h"
 
 int TopAndBottomLimit(float, float, float);
 
@@ -29,9 +30,19 @@ Fish::Fish()
 
 #pragma region Move Functions
 
+void Fish::MoveTo(Point point)
+{
+	Position.X = point.X;
+	Position.Y = point.Y;
+}
+
 void Fish::Move()
 {
-	if (Position.X > MATRIX_HALF_WIDTH || Position.X < -MATRIX_HALF_WIDTH || Position.Y > MATRIX_HALF_HEIGHT || Position.Y < -MATRIX_HALF_HEIGHT) return;
+	if (Position.X > MATRIX_HALF_WIDTH) MoveTo(Point(-MATRIX_HALF_WIDTH + 1, -Position.Y));
+	if (Position.X < -MATRIX_HALF_WIDTH) MoveTo(Point(MATRIX_HALF_WIDTH - 1, -Position.Y));
+	if (Position.Y > MATRIX_HALF_HEIGHT) MoveTo(Point(-Position.X, -MATRIX_HALF_HEIGHT + 1));
+	if (Position.Y < -MATRIX_HALF_HEIGHT) MoveTo(Point(-Position.X, MATRIX_HALF_HEIGHT - 1));
+	//if (Position.X > MATRIX_HALF_WIDTH || Position.X < -MATRIX_HALF_WIDTH || Position.Y > MATRIX_HALF_HEIGHT || Position.Y < -MATRIX_HALF_HEIGHT) return;
 	Vector versorDirection = Direction.Normalized();
 	Position.X += versorDirection.X;
 	Position.Y += versorDirection.Y;
@@ -39,7 +50,10 @@ void Fish::Move()
 
 void Fish::MoveBy(Vector vector)
 {
-	if (Position.X > MATRIX_HALF_WIDTH || Position.X < -MATRIX_HALF_WIDTH || Position.Y > MATRIX_HALF_HEIGHT || Position.Y < -MATRIX_HALF_HEIGHT) return;
+	if (Position.X > MATRIX_HALF_WIDTH) MoveTo(Point(-MATRIX_HALF_WIDTH, -Position.Y));
+	if (Position.X < -MATRIX_HALF_WIDTH) MoveTo(Point(MATRIX_HALF_WIDTH, -Position.Y));
+	if (Position.Y > MATRIX_HALF_HEIGHT) MoveTo(Point(-MATRIX_HALF_WIDTH, -Position.X));
+	if (Position.Y < -MATRIX_HALF_WIDTH) MoveTo(Point(MATRIX_HALF_WIDTH, -Position.X));
 	Position.X += vector.X;
 	Position.Y += vector.Y;
 }
@@ -80,8 +94,8 @@ void Fish::Draw()
 	// fish rear right point
 	glVertex2f(NewPositonDependsOnDirection_X(Point(Position.X + 6, Position.Y - 4)), NewPositonDependsOnDirection_Y(Point(Position.X + 6, Position.Y - 4)));
 	glEnd();
-	DrawCircle(Position.X, Position.Y, FISH_VIEW_RANGE);
-	DrawCircleRangle(Position.X, Position.Y, FISH_COLISION_RANGE);
+	//DrawCircle(Position.X, Position.Y, FISH_VIEW_RANGE);
+	//DrawCircleRangle(Position.X, Position.Y, FISH_COLISION_RANGE);
 }
 
 #pragma endregion
@@ -182,7 +196,7 @@ Vector Fish::VectorToTheAveragePositionOfLocalFlockmates(Fish* fishes, int count
 		}
 	}
 	avaragePosition /= n;
-	if (abs(avaragePosition.X - Position.X) < 0.01 && abs(avaragePosition.Y - Position.Y) < 0.01) return Vector(0, 0);
+	if (fabs(avaragePosition.X - Position.X) < 0.01 && fabs(avaragePosition.Y - Position.Y) < 0.01) return Vector(0, 0);
 	Vector directionToAvaragePosition = Vector(avaragePosition.X - Position.X, avaragePosition.Y - Position.Y);
 	directionToAvaragePosition.Normalize();
 	return directionToAvaragePosition;
@@ -195,9 +209,9 @@ bool Fish::DetectColisionWithFlockmates(Fish* fishes, int count, Vector vector)
 		float x = fishes[i].Position.X;
 		float y = fishes[i].Position.Y;		
 		//if (x == Position.X && y == Position.Y) continue;
-		if (abs(x - Position.X) < 0.001 && (y - Position.Y) < 0.001) continue;
+		if (fabs(x - Position.X) < 0.001 && (y - Position.Y) < 0.001) continue;
 		float new_x = Position.X + vector.X, new_y = Position.Y + vector.Y;
-		if (sqrt((x - new_x)*(x - new_x) + (y - new_y)*(y - new_y)) < (FISH_COLISION_RANGE*2))
+		if (sqrt((x - new_x)*(x - new_x) + (y - new_y)*(y - new_y)) <= (FISH_COLISION_RANGE*2))
 		{
 			//printf("%f x %f -> %f x %f %f\n", Position.X, Position.Y, x, y, sqrt((Position.X - x)*(Position.X - x) + (Position.Y - y)*(Position.Y - y)));
 			return false;

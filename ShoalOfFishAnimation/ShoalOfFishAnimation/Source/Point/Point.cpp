@@ -1,4 +1,5 @@
 #include "Point.h"
+#include <math.h>
 
 Point::Point(float x, float y)
 {
@@ -46,6 +47,9 @@ void Point::operator*=(float a)
 
 void Point::operator/=(float a)
 {
-	X /= a;
-	Y /= a;
+	if (fabs(a) > 0.0001)
+	{
+		X /= a;
+		Y /= a;
+	}
 }

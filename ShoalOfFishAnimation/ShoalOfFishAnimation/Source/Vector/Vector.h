@@ -10,6 +10,12 @@ struct Vector
 
 	Vector operator +(Vector point);
 	Vector operator -(Vector point);
+	Vector operator *(float a);
+	Vector operator /(float a);
+	void operator +=(Vector point);
+	void operator -=(Vector point);
+	void operator *=(float a);
+	void operator /=(float a);
 
 	void Normalize();
 	Vector Normalized();

@@ -1,4 +1,4 @@
-Identity=Source\Gpu\gpu.cu
+Identity=Source\GPUSteering\gpu.cu
 AdditionalCompilerOptions=
 AdditionalCompilerOptions=
 AdditionalDependencies=

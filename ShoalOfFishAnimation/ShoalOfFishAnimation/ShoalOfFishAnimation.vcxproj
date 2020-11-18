@@ -90,7 +90,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CudaCompile Include="Source\Gpu\gpu.cu">
+    <CudaCompile Include="Source\GPUSteering\gpu.cu">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -100,12 +100,18 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Constant\Costant.h" />
+    <ClInclude Include="Source\CPUSteering\SequentialSteering.h" />
     <ClInclude Include="Source\Fish\Fish.h" />
-    <ClInclude Include="Source\WindowDisplay\openGLwindow.h" />
+    <ClInclude Include="Source\GPUSteering\ParallelSteering.cuh" />
+    <ClInclude Include="Source\Point\Point.h" />
+    <ClInclude Include="Source\AnimationWindow\AnimationWindow.h" />
+    <ClInclude Include="Source\Vector\Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Fish\Fish.cpp" />
-    <ClCompile Include="Source\WindowDisplay\openGLwindow.cpp" />
+    <ClCompile Include="Source\Point\Point.cpp" />
+    <ClCompile Include="Source\AnimationWindow\AnimationWindow.cpp" />
+    <ClCompile Include="Source\Vector\Vector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

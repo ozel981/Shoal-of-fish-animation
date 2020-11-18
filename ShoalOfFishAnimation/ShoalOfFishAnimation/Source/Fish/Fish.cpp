@@ -7,9 +7,7 @@
 #include "../Constant/Costant.h"
 #include "../Point/Point.h"
 
-
 #pragma region Constructors
-
 
 Fish::Fish(Point position, float direction)
 {
@@ -21,7 +19,6 @@ Fish::Fish()
 	Position = Point();
 	this->Direction = Vector(TargetPoint_X(0), TargetPoint_Y(0)).Normalized();
 }
-
 
 #pragma endregion
 
@@ -35,22 +32,20 @@ void Fish::MoveTo(Point point)
 
 void Fish::Move()
 {
-	if (Position.X > MATRIX_HALF_WIDTH) MoveTo(Point(-MATRIX_HALF_WIDTH + 1, -Position.Y));
-	if (Position.X < -MATRIX_HALF_WIDTH) MoveTo(Point(MATRIX_HALF_WIDTH - 1, -Position.Y));
-	if (Position.Y > MATRIX_HALF_HEIGHT) MoveTo(Point(-Position.X, -MATRIX_HALF_HEIGHT + 1));
-	if (Position.Y < -MATRIX_HALF_HEIGHT) MoveTo(Point(-Position.X, MATRIX_HALF_HEIGHT - 1));
-	//if (Position.X > MATRIX_HALF_WIDTH || Position.X < -MATRIX_HALF_WIDTH || Position.Y > MATRIX_HALF_HEIGHT || Position.Y < -MATRIX_HALF_HEIGHT) return;
-	Vector versorDirection = Direction.Normalized();
-	Position.X += versorDirection.X;
-	Position.Y += versorDirection.Y;
+	if (Position.X > MATRIX_HALF_WIDTH) MoveTo(Point(-MATRIX_HALF_WIDTH, -Position.Y));
+	if (Position.X < -MATRIX_HALF_WIDTH) MoveTo(Point(MATRIX_HALF_WIDTH, -Position.Y));
+	if (Position.Y > MATRIX_HALF_HEIGHT) MoveTo(Point(-Position.X, -MATRIX_HALF_HEIGHT));
+	if (Position.Y < -MATRIX_HALF_HEIGHT) MoveTo(Point(-Position.X, MATRIX_HALF_HEIGHT));
+	Position.X += Direction.X;
+	Position.Y += Direction.Y;
 }
 
 void Fish::MoveBy(Vector vector)
 {
 	if (Position.X > MATRIX_HALF_WIDTH) MoveTo(Point(-MATRIX_HALF_WIDTH, -Position.Y));
 	if (Position.X < -MATRIX_HALF_WIDTH) MoveTo(Point(MATRIX_HALF_WIDTH, -Position.Y));
-	if (Position.Y > MATRIX_HALF_HEIGHT) MoveTo(Point(-MATRIX_HALF_WIDTH, -Position.X));
-	if (Position.Y < -MATRIX_HALF_WIDTH) MoveTo(Point(MATRIX_HALF_WIDTH, -Position.X));
+	if (Position.Y > MATRIX_HALF_HEIGHT) MoveTo(Point(-Position.X, -MATRIX_HALF_HEIGHT));
+	if (Position.Y < -MATRIX_HALF_HEIGHT) MoveTo(Point(-Position.X, MATRIX_HALF_HEIGHT));
 	Position.X += vector.X;
 	Position.Y += vector.Y;
 }
@@ -70,36 +65,31 @@ void DrawCircle(float cx, float cy, float r) {
 	glEnd();
 }
 
-void DrawCircleRangle(float cx, float cy, float r) {
-	glBegin(GL_LINE_LOOP);
-	for (int ii = 0; ii < 10000; ii++) {
-		float theta = 2.0f * 3.1415926f * float(ii) / float(10000);//get the current angle 
-		float x = r * cosf(theta);//calculate the x component 
-		float y = r * sinf(theta);//calculate the y component 
-		glVertex2f(x + cx, y + cy);//output vertex 
-	}
-	glEnd();
-}
-
 void Fish::Draw()
 {
 	glBegin(GL_TRIANGLES);
 	// fish front point
 	glVertex2f(Position.X + (Direction.X * FISH_FRON_LENGTH), Position.Y + (Direction.Y * FISH_FRON_LENGTH));
+	Vector leftVect = Vector(-Direction.Y, Direction.X);
+	leftVect *= FISH_SIDE_THICKNESS;
+	Vector rightVect = Vector(Direction.Y, -Direction.X);
+	rightVect *= FISH_SIDE_THICKNESS;
+	Vector rearVect = Vector(-Direction.X, -Direction.X);
+	rearVect * FISH_BACK_LENGTH;
+	leftVect += rearVect;
+	rightVect += rearVect;
 	// fish rear left point
-	glVertex2f(Position.X  -Direction.Y * FISH_BACK_LENGTH, Position.Y +  Direction.X * FISH_BACK_LENGTH);
+	glVertex2f(Position.X  + leftVect.X, Position.Y + leftVect.Y);
 	// fish rear right point
-	glVertex2f(Position.X +  Direction.Y * FISH_BACK_LENGTH, Position.Y  -Direction.X * FISH_BACK_LENGTH);
+	glVertex2f(Position.X + rightVect.X, Position.Y + rightVect.Y);
 	glEnd();
-	//DrawCircle(Position.X, Position.Y, FISH_VIEW_RANGE);
-	//DrawCircleRangle(Position.X, Position.Y, FISH_COLISION_RANGE);
 }
 
 #pragma endregion
 
-#pragma region Steering Fish
+#pragma region Fish steering
 
-void Fish::SteerToTheAverageHeadingOfLocalFlockmates(Fish* fishes, int count)
+Vector Fish::VectorToTheAverageHeadingOfLocalFlockmates(Fish* fishes, int count)
 {
 	Vector avarageDirection = Vector(Direction.X, Direction.Y);
 	int n = 1;
@@ -118,10 +108,10 @@ void Fish::SteerToTheAverageHeadingOfLocalFlockmates(Fish* fishes, int count)
 	{
 		avarageDirection.Normalize();
 	}
-	Direction = avarageDirection;
+	return avarageDirection;
 }
 
-void Fish::SteerToTheAveragePositionOfLocalFlockmates(Fish* fishes, int count)
+Vector Fish::VectorToTheAveragePositionOfLocalFlockmates(Fish* fishes, int count)
 {
 	Point avaragePosition = Point(Position.X, Position.Y);
 	int n = 1;
@@ -137,33 +127,32 @@ void Fish::SteerToTheAveragePositionOfLocalFlockmates(Fish* fishes, int count)
 		}
 	}
 	avaragePosition /= n;
-	if (fabs(avaragePosition.X - Position.X) < 0.01 && fabs(avaragePosition.Y - Position.Y) < 0.01) return;
+	if (fabs(avaragePosition.X - Position.X) < 0.01 && fabs(avaragePosition.Y - Position.Y) < 0.01) return Vector(0,0);
 	Vector directionToAvaragePosition = Vector(avaragePosition.X - Position.X, avaragePosition.Y - Position.Y);
 	directionToAvaragePosition.Normalize();
-	directionToAvaragePosition *= 0.3;
-	Direction += directionToAvaragePosition;
+	return directionToAvaragePosition;
 }
 
-bool Fish::DetectColisionWithFlockmates(Fish* fishes, int count, Vector vector)
+Vector Fish::VectorToAvoidCrowdingLocalFlockmates(Fish* fishes, int count)
 {
+	Vector resultantVersor = Vector(0, 0);
 	for (int i = 0; i < count; i++)
 	{
 		float x = fishes[i].Position.X;
-		float y = fishes[i].Position.Y;		
-		//if (x == Position.X && y == Position.Y) continue;
+		float y = fishes[i].Position.Y;
 		if (fabs(x - Position.X) < 0.001 && (y - Position.Y) < 0.001) continue;
-		float new_x = Position.X + vector.X, new_y = Position.Y + vector.Y;
-		if (sqrt((x - new_x)*(x - new_x) + (y - new_y)*(y - new_y)) <= (FISH_COLISION_RANGE*2))
+		Vector fromLocalToNeigh = Vector(x - Position.X, y - Position.Y);
+		if (fromLocalToNeigh.Length() <= (FISH_COLISION_RANGE * 2))
 		{
-			//printf("%f x %f -> %f x %f %f\n", Position.X, Position.Y, x, y, sqrt((Position.X - x)*(Position.X - x) + (Position.Y - y)*(Position.Y - y)));
-			return false;
+			fromLocalToNeigh.Normalize();
+			fromLocalToNeigh *= ((FISH_COLISION_RANGE * 2) - fromLocalToNeigh.Length());
+			resultantVersor -= fromLocalToNeigh;
 		}
 	}
-	return true;
+	return resultantVersor;
 }
 
 #pragma endregion
-
 
 #pragma region Degree to vector
 

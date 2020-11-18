@@ -4,25 +4,31 @@
 
 struct Fish
 {
-public:
+private:
 	Point Position;
+public:
 	Vector Direction;
-
 	Fish(Point position, float direction = 0);
 	Fish();
 
-public:
+private:
 	float TargetPoint_X(float direction);
 	float TargetPoint_Y(float direction);
 
 public:
 	void Draw();
+
+	#pragma region Fish moving
 	void Move();
 	void MoveTo(Point point);
 	void MoveBy(Vector vector);
-	void SteerToTheAverageHeadingOfLocalFlockmates(Fish* fishes, int count);
-	void SteerToTheAveragePositionOfLocalFlockmates(Fish* fishes, int count);
-	bool DetectColisionWithFlockmates(Fish* fishes, int count, Vector vector);
+	#pragma endregion
+
+	#pragma region Fish steering
+	Vector VectorToTheAverageHeadingOfLocalFlockmates(Fish* fishes, int count);
+	Vector VectorToTheAveragePositionOfLocalFlockmates(Fish* fishes, int count);
+	Vector VectorToAvoidCrowdingLocalFlockmates(Fish* fishes, int count);
+	#pragma endregion
 };
 
 

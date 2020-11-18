@@ -1,20 +1,16 @@
-#include "openGLwindow.h"
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <math.h>
-#include "../Fish/Fish.h"
-#include "../Constant/Costant.h"
 #include <time.h>
 
+#include "AnimationWindow.h"
+#include "../Fish/Fish.h"
+#include "../Constant/Costant.h"
+#include "../CPUSteering/SequentialSteering.h"
+
 #pragma comment (lib, "glew32s.lib")
-
-float x_position = -10;
-bool rightDirection = 1;
-
-bool moveAllow = true;
-Fish Fishs[FISH_COUNT];
 
 void Display();
 void Timer(int);
@@ -22,30 +18,28 @@ void Init();
 void Reshape(int, int);
 void KeyboardInput(unsigned char, int, int);
 
-int DisplayWindow()
+AnimationWindow animationWindow;
+
+#pragma region Constructors
+
+AnimationWindow::AnimationWindow(bool isCPU)
 {
+	this->isCPU = isCPU;
+
 	srand(time(NULL));
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
 		float x = MATRIX_HALF_WIDTH - (float)(rand() % (int)(2 * MATRIX_HALF_WIDTH));
 		float y = MATRIX_HALF_HEIGHT - (float)(rand() % (int)(2 * MATRIX_HALF_HEIGHT));
-		//printf("%d: %f x %f\n",i, x, y);
-		Fishs[i] = Fish(Point(x,y), rand() % 360);
+		FishShol[i] = Fish(Point(x, y), rand() % 360);
 	}
-	/*for (int i = 0; i < 600; i++)
-	{
-		Fishs[FISH_COUNT + i] = Fish(-300, -300 + i,270.0);
-		Fishs[FISH_COUNT + 600 + i] = Fish(300, -300 + i, 90.0);
-		Fishs[FISH_COUNT + 1200 + i] = Fish(-300 + i, -300, 0.0);
-		Fishs[FISH_COUNT + 1800 + i] = Fish(-300 + i, 300, 180.0);
-	}*/
-	/*printf("%f x %f\n", Fishs[0].X, Fishs[0].Y);
-	for (int i = 0; i <= 360; i++)
-	{
-		float x = 100 * cos(DegreeToRadians(i)) + 100;
-		float y = 100 * sin(DegreeToRadians(i)) - 100;
-		printf("%f x %f -> %f\n",x,y, Fishs[0].GetDirectionToPoint(x, y));
-	}*/
+}
+
+#pragma endregion
+
+void AnimationWindow::Run()
+{
+	animationWindow = this;
 
 	int argc = 1;
 	char* argv[1] = { "shoal-of-fish" };
@@ -57,7 +51,6 @@ int DisplayWindow()
 	glutInitWindowSize(500, 500);
 
 	glutCreateWindow("Shoal of fish");
-
 	glutDisplayFunc(Display);
 	glutReshapeFunc(Reshape);
 	glutTimerFunc(0, Timer, 0);
@@ -66,8 +59,10 @@ int DisplayWindow()
 
 	glutMainLoop();
 
-	return 0;
 }
+
+// Functions necessary for servicing GLUT OpenGL
+#pragma region Friend functions
 
 void Display()
 {
@@ -78,7 +73,7 @@ void Display()
 
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
-		Fishs[i].Draw();
+		animationWindow.FishShol[i].Draw();
 	}
 
 	glutSwapBuffers();
@@ -87,23 +82,9 @@ void Display()
 void Timer(int)
 {
 	glutPostRedisplay();
-	if(moveAllow) glutTimerFunc(1000 / 30, Timer, 0);
-	Vector vectors[FISH_COUNT];
-	Vector vectors2[FISH_COUNT];
-	for (int i = 0; i < FISH_COUNT; i++)
-	{
-		vectors[i] = Fishs[i].VectorToTheAverageHeadingOfLocalFlockmates(Fishs, FISH_COUNT) * 2;
-		vectors2[i] += Fishs[i].VectorToAvoidCrowdingLocalFlockmates(Fishs, FISH_COUNT)*0.05;
-		vectors2[i] += Fishs[i].VectorToTheAveragePositionOfLocalFlockmates(Fishs, FISH_COUNT)*0.3;
-	}
-	for (int i = 0; i < FISH_COUNT; i++)
-	{
-		Fishs[i].Direction = vectors[i].Normalized();
-		Fishs[i].Move();
-		Fishs[i].MoveBy(vectors2[i]);
-	}
+	glutTimerFunc(1000 / 30, Timer, 0);
 
-
+	if (animationWindow.isCPU) SteerSequential(animationWindow.FishShol, FISH_COUNT);
 }
 
 void Init()
@@ -122,16 +103,18 @@ void Reshape(int width, int height)
 
 void KeyboardInput(unsigned char key, int x, int y)
 {
-	switch (key) 
+	switch (key)
 	{
-		case ' ':
-		{
-			moveAllow = !moveAllow;
-			if(moveAllow) glutTimerFunc(0, Timer, 0);
-		}
-		break;
-		default:
+	case ' ':
+	{
+		glutTimerFunc(0, Timer, 0);
+	}
+	break;
+	default:
 		break;
 	}
 	glutPostRedisplay();
 }
+
+#pragma endregion
+

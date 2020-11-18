@@ -1,11 +1,15 @@
 #include "Point.h"
 #include <math.h>
 
+#pragma region Constructors
 Point::Point(float x, float y)
 {
 	X = x;
 	Y = y;
 }
+#pragma endregion
+
+#pragma region Operations
 
 Point Point::operator+(Point point)
 {
@@ -24,7 +28,7 @@ Point Point::operator*(float a)
 
 Point Point::operator/(float a)
 {
-	return Point(X/a, Y/a);
+	return Point(X / a, Y / a);
 }
 
 void Point::operator+=(Point point)
@@ -53,3 +57,7 @@ void Point::operator/=(float a)
 		Y /= a;
 	}
 }
+
+#pragma endregion
+
+

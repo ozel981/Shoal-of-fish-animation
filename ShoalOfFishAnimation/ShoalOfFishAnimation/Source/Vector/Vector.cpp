@@ -1,12 +1,16 @@
 #include "Vector.h"
 #include <math.h>
 
+
+#pragma region Constructors
 Vector::Vector(float x, float y)
 {
 	this->X = x;
 	this->Y = y;
-
 }
+#pragma endregion
+
+#pragma region Normalization
 
 void Vector::Normalize()
 {
@@ -14,6 +18,18 @@ void Vector::Normalize()
 	X /= length;
 	Y /= length;
 }
+
+Vector Vector::Normalized()
+{
+	float length = Length();
+	float x = X / length;
+	float y = Y / length;
+	return Vector(x, y);
+}
+
+#pragma endregion
+
+#pragma region Operators
 
 Vector Vector::operator+(Vector vector)
 {
@@ -62,19 +78,12 @@ void Vector::operator/=(float a)
 	}
 }
 
-Vector Vector::Normalized()
-{
-	float length = Length();
-	float x = X / length;
-	float y = Y / length;
-	return Vector(x, y);
-}
-
 void Vector::operator=(Vector vector)
 {
 	X = vector.X;
 	Y = vector.Y;
 }
+#pragma endregion
 
 float Vector::Length()
 {

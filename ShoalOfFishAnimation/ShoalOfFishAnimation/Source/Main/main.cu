@@ -1,12 +1,19 @@
-/*#include "../Gpu/gpu.cu"
-#include "../WindowDisplay/openGLwindow.h"
+#include <iostream>
 
-extern int CudaMain(void);
+#include "../AnimationWindow/AnimationWindow.h"
+
 
 int main()
 {
-	CudaMain();
-	DisplayWindow();
+	bool isCPU = true;
+	
+	std::cout << "1. CPU steereing" << std::endl;
+	std::cout << "2. GPU steering" << std::endl;
+	std::cout << ":";
+	int x;
+	scanf("%d",&x);
+	if (x == 1) AnimationWindow(isCPU).Run();
+	if (x == 2) printf("GPU version not ready!");
 
 	return 0;
-}*/
+}

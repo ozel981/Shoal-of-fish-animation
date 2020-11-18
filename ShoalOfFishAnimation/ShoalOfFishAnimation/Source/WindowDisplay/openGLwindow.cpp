@@ -92,24 +92,18 @@ void Timer(int)
 	Vector vectors[FISH_COUNT];
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
-		fishes[i] = Fishs[i].SteerTowardsTheAverageHeadingOfLocalFlockmates(Fishs, FISH_COUNT);
-	}
-	for (int i = 0; i < FISH_COUNT; i++)
-	{
-		vectors[i] = Fishs[i].VectorToTheAveragePositionOfLocalFlockmates(Fishs, FISH_COUNT);
+		Fishs[i].SteerToTheAverageHeadingOfLocalFlockmates(Fishs, FISH_COUNT);
 	}
 
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
 		if (Fishs[i].DetectColisionWithFlockmates(Fishs, FISH_COUNT, vectors[i]))
 		{
-
-			Fishs[i].MoveBy(vectors[i]*0.3);
+			Fishs[i].SteerToTheAveragePositionOfLocalFlockmates(Fishs, FISH_COUNT);
 		}
 	}
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
-		Fishs[i].SetDirection(fishes[i]);
 		Fishs[i].Move();
 	}
 

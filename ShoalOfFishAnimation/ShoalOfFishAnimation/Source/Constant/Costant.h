@@ -9,7 +9,7 @@
 
 #pragma region Fish
 
-#define FISH_COUNT 20
+#define FISH_COUNT 50
 #define FISH_SIDE_THICKNESS 6.0
 #define FISH_FRON_LENGTH 12.0
 #define FISH_BACK_LENGTH 4.0

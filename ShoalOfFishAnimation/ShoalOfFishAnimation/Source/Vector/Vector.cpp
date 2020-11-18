@@ -10,19 +10,19 @@ Vector::Vector(float x, float y)
 
 void Vector::Normalize()
 {
-	float length = sqrt(X*X + Y * Y);
+	float length = Length();
 	X /= length;
 	Y /= length;
 }
 
-Vector Vector::operator+(Vector point)
+Vector Vector::operator+(Vector vector)
 {
-	return Vector(X + point.X, Y + point.Y);
+	return Vector(X + vector.X, Y + vector.Y);
 }
 
-Vector Vector::operator-(Vector point)
+Vector Vector::operator-(Vector vector)
 {
-	return Vector(X - point.X, Y - point.Y);
+	return Vector(X - vector.X, Y - vector.Y);
 }
 
 Vector Vector::operator*(float a)
@@ -35,16 +35,16 @@ Vector Vector::operator/(float a)
 	return Vector(X / a, Y / a);
 }
 
-void Vector::operator+=(Vector point)
+void Vector::operator+=(Vector vector)
 {
-	X += point.X;
-	Y += point.Y;
+	X += vector.X;
+	Y += vector.Y;
 }
 
-void Vector::operator-=(Vector point)
+void Vector::operator-=(Vector vector)
 {
-	X -= point.X;
-	Y -= point.Y;
+	X -= vector.X;
+	Y -= vector.Y;
 }
 
 void Vector::operator*=(float a)
@@ -64,8 +64,19 @@ void Vector::operator/=(float a)
 
 Vector Vector::Normalized()
 {
-	float length = sqrt(X*X + Y * Y);
+	float length = Length();
 	float x = X / length;
 	float y = Y / length;
 	return Vector(x, y);
+}
+
+void Vector::operator=(Vector vector)
+{
+	X = vector.X;
+	Y = vector.Y;
+}
+
+float Vector::Length()
+{
+	return sqrt(X*X + Y*Y);
 }

@@ -2,6 +2,7 @@
 #include <GL/freeglut.h>
 #include <GLFW/glfw3.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <time.h>
 
@@ -9,8 +10,10 @@
 #include "../Fish/Fish.h"
 #include "../Constant/Costant.h"
 #include "../CPUSteering/SequentialSteering.h"
+#include "../GPUSteering/ParallelSteering.cuh"
 
 #pragma comment (lib, "glew32s.lib")
+
 
 void Display();
 void Timer(int);
@@ -18,7 +21,10 @@ void Init();
 void Reshape(int, int);
 void KeyboardInput(unsigned char, int, int);
 
-AnimationWindow animationWindow;
+extern "C" void ParallelSteering(Fish* h_fish, int count);
+
+AnimationWindow* animationWindow = &AnimationWindow(true);
+bool AnimationRun = true;
 
 #pragma region Constructors
 
@@ -41,6 +47,8 @@ void AnimationWindow::Run()
 {
 	animationWindow = this;
 
+
+
 	int argc = 1;
 	char* argv[1] = { "shoal-of-fish" };
 
@@ -57,7 +65,10 @@ void AnimationWindow::Run()
 	glutKeyboardFunc(KeyboardInput);
 	Init();
 
+
 	glutMainLoop();
+
+		
 
 }
 
@@ -73,7 +84,7 @@ void Display()
 
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
-		animationWindow.FishShol[i].Draw();
+		animationWindow->FishShol[i].Draw();
 	}
 
 	glutSwapBuffers();
@@ -82,9 +93,17 @@ void Display()
 void Timer(int)
 {
 	glutPostRedisplay();
-	glutTimerFunc(1000 / 30, Timer, 0);
+	if(AnimationRun) glutTimerFunc(1000 / 30, Timer, 0);
 
-	if (animationWindow.isCPU) SteerSequential(animationWindow.FishShol, FISH_COUNT);
+	if (animationWindow->IsCPU())
+	{
+		SteerSequential(animationWindow->FishShol, FISH_COUNT);
+	}
+	else
+	{
+		ParallelSteering(animationWindow->FishShol, FISH_COUNT);
+		
+	}
 }
 
 void Init()
@@ -107,7 +126,12 @@ void KeyboardInput(unsigned char key, int x, int y)
 	{
 	case ' ':
 	{
-		glutTimerFunc(0, Timer, 0);
+		if (AnimationRun) AnimationRun = false;
+		else
+		{
+			AnimationRun = true;
+			glutTimerFunc(0, Timer, 0);
+		}
 	}
 	break;
 	default:

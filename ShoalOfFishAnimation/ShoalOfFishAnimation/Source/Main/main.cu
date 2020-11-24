@@ -12,8 +12,14 @@ int main()
 	std::cout << ":";
 	int x;
 	scanf("%d",&x);
-	if (x == 1) AnimationWindow(isCPU).Run();
-	if (x == 2) printf("GPU version not ready!");
+	if (x == 1)
+	{
+		AnimationWindow(isCPU).Run();
+	}
+	if (x == 2)
+	{
+		AnimationWindow(!isCPU).Run();
+	}
 
 	return 0;
 }

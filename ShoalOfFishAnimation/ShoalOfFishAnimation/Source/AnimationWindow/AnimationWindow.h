@@ -4,15 +4,17 @@
 #include "../Constant/Costant.h"
 #include "../Fish/Fish.h"
 
+
+
 class AnimationWindow
 {
 private:
-	bool isCPU = true;
+	bool isCPU;
 
 	Fish FishShol[FISH_COUNT];
 public:
-	AnimationWindow(bool isCPU = true);
-	
+	AnimationWindow(bool isCPU);
+	bool IsCPU() { return isCPU; }
 	void Run();
 
 	#pragma region Friend functions

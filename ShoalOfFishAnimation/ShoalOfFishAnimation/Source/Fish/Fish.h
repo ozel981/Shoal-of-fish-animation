@@ -1,12 +1,14 @@
 #pragma once
+#include <cuda_runtime.h>
+
 #include "../Point/Point.h"
 #include "../Vector/Vector.h"
 
 struct Fish
 {
-private:
-	Point Position;
 public:
+	Point Position;
+
 	Vector Direction;
 	Fish(Point position, float direction = 0);
 	Fish();

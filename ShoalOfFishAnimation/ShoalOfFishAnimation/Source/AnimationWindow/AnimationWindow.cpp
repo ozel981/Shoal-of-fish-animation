@@ -1,3 +1,7 @@
+//For test time
+#include <iostream>
+#include <chrono> 
+//
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <GLFW/glfw3.h>
@@ -97,12 +101,20 @@ void Timer(int)
 
 	if (animationWindow->IsCPU())
 	{
+
+		auto start = std::chrono::high_resolution_clock::now();
 		SteerSequential(animationWindow->FishShol, FISH_COUNT);
+		auto finish = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsed = finish - start;
+		std::cout << "Elapsed time: " << elapsed.count() << " s\n";
 	}
 	else
 	{
+		auto start = std::chrono::high_resolution_clock::now();
 		ParallelSteering(animationWindow->FishShol, FISH_COUNT);
-		
+		auto finish = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsed = finish - start;
+		std::cout << "Elapsed time: " << elapsed.count() << " s\n";
 	}
 }
 

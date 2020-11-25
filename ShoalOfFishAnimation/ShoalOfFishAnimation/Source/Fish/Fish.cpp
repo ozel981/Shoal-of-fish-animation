@@ -84,8 +84,8 @@ void Fish::Draw()
 	glVertex2f(Position.X + rightVect.X, Position.Y + rightVect.Y);
 	
 	glEnd();
-	DrawCircle(Position.X, Position.Y, FISH_VIEW_RANGE);
-	DrawCircle(Position.X, Position.Y, FISH_COLISION_RANGE);
+	//DrawCircle(Position.X, Position.Y, FISH_VIEW_RANGE);
+	//DrawCircle(Position.X, Position.Y, FISH_COLISION_RANGE);
 }
 
 #pragma endregion

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono> 
 
 #include <GL/glew.h>
 
@@ -28,7 +29,32 @@ __global__ void MoveFish(Fish *fish)
 	if (threadIndex < FISH_COUNT)
 	{
 		#pragma region SteerToTheAverageHeadingOfLocalFlockmates
-
+		//Vector avarageDirection = Vector(Direction.X, Direction.Y);
+		float avarageDirection_X = fish[threadIndex].Direction.X;
+		float avarageDirection_Y = fish[threadIndex].Direction.Y;
+		for (int i = 0; i < FISH_COUNT; i++)
+		{
+			if (i == threadIndex) continue;
+			float x = fish[i].Position.X;
+			float y = fish[i].Position.Y;
+			if (sqrt((fish[threadIndex].Position.X - x)*(fish[threadIndex].Position.X - x) + (fish[threadIndex].Position.Y - y)*(fish[threadIndex].Position.Y - y)) < FISH_VIEW_RANGE)
+			{
+				//avarageDirection += fishes[i].Direction;
+				avarageDirection_X += fish[i].Direction.X;
+				avarageDirection_Y += fish[i].Direction.Y;
+			}
+		}
+		float length = sqrt(avarageDirection_X*avarageDirection_X + avarageDirection_Y * avarageDirection_Y);
+		if (length > 0.0001)
+		{
+			avarageDirection_X /= length;
+			avarageDirection_Y /= length;
+		}
+		else
+		{
+			avarageDirection_X = fish[threadIndex].Direction.X;
+			avarageDirection_Y = fish[threadIndex].Direction.Y;
+		}
 		#pragma endregion
 
 		#pragma region SteerToTheAveragePositionOfLocalFlockmates
@@ -89,10 +115,32 @@ __global__ void MoveFish(Fish *fish)
 		#pragma endregion
 
 		__syncthreads();
-		fish[threadIndex].Position.X += voctorToAvgPosition_X;		
-		fish[threadIndex].Position.Y += voctorToAvgPosition_Y;
-		fish[threadIndex].Position.X += resultantVersor_X*0.6;
-		fish[threadIndex].Position.Y += resultantVersor_Y*0.6;
+		float x_move = voctorToAvgPosition_X + resultantVersor_X * 0.3 + avarageDirection_X * 2;
+		float y_move = voctorToAvgPosition_Y + resultantVersor_Y * 0.3 + avarageDirection_Y * 2;
+		fish[threadIndex].Position.X += x_move;
+		fish[threadIndex].Position.Y += y_move;
+		if (fish[threadIndex].Position.X > MATRIX_HALF_WIDTH)
+		{
+			fish[threadIndex].Position.X = -MATRIX_HALF_WIDTH;
+			fish[threadIndex].Position.Y *= -1;
+		}
+		if (fish[threadIndex].Position.X < -MATRIX_HALF_WIDTH)
+		{
+			fish[threadIndex].Position.X = MATRIX_HALF_WIDTH;
+			fish[threadIndex].Position.Y *= -1;
+		}
+		if (fish[threadIndex].Position.Y > MATRIX_HALF_HEIGHT)
+		{
+			fish[threadIndex].Position.X *= -1;
+			fish[threadIndex].Position.Y = -MATRIX_HALF_HEIGHT;
+		}
+		if (fish[threadIndex].Position.Y < -MATRIX_HALF_HEIGHT)
+		{
+			fish[threadIndex].Position.X *= -1;
+			fish[threadIndex].Position.Y = MATRIX_HALF_HEIGHT;
+		}
+		fish[threadIndex].Direction.X = avarageDirection_X;
+		fish[threadIndex].Direction.Y = avarageDirection_Y;
 	}
 
 }
@@ -154,9 +202,10 @@ extern "C" void ParallelSteering(Fish* h_fish, int count)
 	Fish* d_fish;
 	cudaMalloc((void**)&d_fish, count * sizeof(Fish));
 	cudaMemcpy(d_fish, h_fish, count * sizeof(Fish), cudaMemcpyHostToDevice);
-	MoveFish << <1, count >> > (d_fish);
+	MoveFish << <1, count >> > (d_fish);	
 	cudaThreadSynchronize();
 	cudaMemcpy(h_fish, d_fish, count * sizeof(Fish), cudaMemcpyDeviceToHost);
+
 	cudaFree(d_fish);
 }
 

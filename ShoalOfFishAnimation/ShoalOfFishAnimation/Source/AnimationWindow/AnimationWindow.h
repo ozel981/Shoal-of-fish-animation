@@ -14,6 +14,7 @@ private:
 	Fish FishShol[FISH_COUNT];
 public:
 	AnimationWindow(bool isCPU);
+	~AnimationWindow();
 	bool IsCPU() { return isCPU; }
 	void Run();
 

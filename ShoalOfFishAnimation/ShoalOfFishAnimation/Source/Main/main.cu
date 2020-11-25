@@ -19,7 +19,9 @@ int main()
 	if (x == 2)
 	{
 		AnimationWindow(!isCPU).Run();
+
 	}
 
+	//cudaFree(d_fish);
 	return 0;
 }

@@ -11,6 +11,8 @@
 #include "ParallelSteering.cuh"
 #include "../Constant/Costant.h"
 
+#pragma once
+
 #ifdef NVCC
 #define CU_LAUNCH(...) <<<__VA_ARGS__>>>
 #else
@@ -26,6 +28,8 @@
 __global__ void MoveFish(Fish *fish)
 {
 	int threadIndex = threadIdx.x;
+	int blockIndex = blockIdx.x;
+	threadIndex = (blockIndex * 1024) + threadIndex;
 	if (threadIndex < FISH_COUNT)
 	{
 		#pragma region SteerToTheAverageHeadingOfLocalFlockmates
@@ -172,6 +176,20 @@ __global__ void FishM(float* x, float* y)
 	}
 }
 
+
+Fish* d_fish;
+
+extern "C" void InitParallerlSteering(Fish* h_fish, int count)
+{
+	cudaMalloc((void**)&d_fish, count * sizeof(Fish));
+	cudaMemcpy(d_fish, h_fish, count * sizeof(Fish), cudaMemcpyHostToDevice);
+}
+
+extern "C" void FinalizeParallerlSteering()
+{
+	cudaFree(d_fish);
+}
+
 extern "C" void ParallelSteering(Fish* h_fish, int count)
 {
 	/*float h_PosX[FISH_COUNT];
@@ -199,13 +217,11 @@ extern "C" void ParallelSteering(Fish* h_fish, int count)
 		printf("%d:po: %f - %f\n",i, h_PosX[i], h_PosY[i]);
 
 	}*/
-	Fish* d_fish;
-	cudaMalloc((void**)&d_fish, count * sizeof(Fish));
-	cudaMemcpy(d_fish, h_fish, count * sizeof(Fish), cudaMemcpyHostToDevice);
-	MoveFish << <1, count >> > (d_fish);	
+
+	MoveFish << <1 + (FISH_COUNT/1024), 1024 >> > (d_fish);
 	cudaThreadSynchronize();
 	cudaMemcpy(h_fish, d_fish, count * sizeof(Fish), cudaMemcpyDeviceToHost);
 
-	cudaFree(d_fish);
+	
 }
 

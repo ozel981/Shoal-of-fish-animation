@@ -20,12 +20,15 @@
 
 
 void Display();
+void CloseWindow();
 void Timer(int);
 void Init();
 void Reshape(int, int);
 void KeyboardInput(unsigned char, int, int);
 
 extern "C" void ParallelSteering(Fish* h_fish, int count);
+extern "C" void InitParallerlSteering(Fish* h_fish, int count);
+extern "C" void FinalizeParallerlSteering();
 
 AnimationWindow* animationWindow = &AnimationWindow(true);
 bool AnimationRun = true;
@@ -47,6 +50,11 @@ AnimationWindow::AnimationWindow(bool isCPU)
 
 #pragma endregion
 
+AnimationWindow::~AnimationWindow()
+{
+	FinalizeParallerlSteering();
+}
+
 void AnimationWindow::Run()
 {
 	animationWindow = this;
@@ -67,12 +75,16 @@ void AnimationWindow::Run()
 	glutReshapeFunc(Reshape);
 	glutTimerFunc(0, Timer, 0);
 	glutKeyboardFunc(KeyboardInput);
+	glutCloseFunc(CloseWindow);
 	Init();
+
+	if (!(animationWindow->IsCPU()))
+	{
+		InitParallerlSteering(animationWindow->FishShol, FISH_COUNT);
+	}
 
 
 	glutMainLoop();
-
-		
 
 }
 
@@ -116,6 +128,12 @@ void Timer(int)
 		std::chrono::duration<double> elapsed = finish - start;
 		std::cout << "Elapsed time: " << elapsed.count() << " s\n";
 	}
+}
+void CloseWindow()
+{
+	AnimationRun = false;
+	Sleep(100);
+	FinalizeParallerlSteering();
 }
 
 void Init()

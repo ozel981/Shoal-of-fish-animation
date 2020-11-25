@@ -2,14 +2,14 @@
 
 #pragma region Matrix
 
-#define MATRIX_HALF_WIDTH 300.0
-#define MATRIX_HALF_HEIGHT 300.0
+#define MATRIX_HALF_WIDTH 400.0
+#define MATRIX_HALF_HEIGHT 400.0
 
 #pragma endregion
 
 #pragma region Fish
 
-#define FISH_COUNT 100
+#define FISH_COUNT 50
 #define FISH_SIDE_THICKNESS 6.0
 #define FISH_FRON_LENGTH 16.0
 #define FISH_BACK_LENGTH 4.0

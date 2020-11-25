@@ -27,19 +27,25 @@ __global__ void MoveFish(Fish *fish)
 	int threadIndex = threadIdx.x;
 	if (threadIndex < FISH_COUNT)
 	{
+		#pragma region SteerToTheAverageHeadingOfLocalFlockmates
+
+		#pragma endregion
+
 		#pragma region SteerToTheAveragePositionOfLocalFlockmates
 		float voctorToAvgPosition_X = 0, voctorToAvgPosition_Y = 0;
 		{
-			float avgPosition_X = 0;
-			float avgPosition_Y = 0;
+			float avgPosition_X = fish[threadIndex].Position.X;
+			float avgPosition_Y = fish[threadIndex].Position.Y;
 			int n = 1;
 			for (int i = 0; i < FISH_COUNT; i++)
 			{
+				if (i == threadIndex) continue;
 				float x = fish[i].Position.X;
 				float y = fish[i].Position.Y;
 				float dist_x = fish[threadIndex].Position.X - x;
 				float dist_y = fish[threadIndex].Position.Y - y;
-				if (dist_x * dist_x + dist_y * dist_y < FISH_VIEW_RANGE*FISH_VIEW_RANGE)
+				
+				if (sqrt(dist_x * dist_x + dist_y * dist_y) < FISH_VIEW_RANGE)
 				{
 					avgPosition_X += x;
 					avgPosition_Y += y;
@@ -81,12 +87,12 @@ __global__ void MoveFish(Fish *fish)
 			}
 		}
 		#pragma endregion
-		
+
 		__syncthreads();
-		fish[threadIndex].Position.X += voctorToAvgPosition_X*0.9;		
-		fish[threadIndex].Position.Y += voctorToAvgPosition_Y*0.9;
-		fish[threadIndex].Position.X += resultantVersor_X * 0.15;
-		fish[threadIndex].Position.Y += resultantVersor_Y *0.15;
+		fish[threadIndex].Position.X += voctorToAvgPosition_X;		
+		fish[threadIndex].Position.Y += voctorToAvgPosition_Y;
+		fish[threadIndex].Position.X += resultantVersor_X*0.6;
+		fish[threadIndex].Position.Y += resultantVersor_Y*0.6;
 	}
 
 }
@@ -96,39 +102,23 @@ __global__ void FishM(float* x, float* y)
 	int threadIndex = threadIdx.x;
 	if (threadIndex < FISH_COUNT)
 	{
-		float a_x = 0;
-		float a_y = 0;
-		int n = 0;
+		float a_x = x[threadIndex];
+		float a_y = y[threadIndex];
+		int n = 1;
 		for (int i = 0; i < FISH_COUNT; i++)
 		{
+			if (i == threadIndex) continue;
 			float d_x = x[i] - x[threadIndex];
 			float d_y = y[i] - y[threadIndex];
-			if ((d_x*d_x + d_y * d_y) < FISH_VIEW_RANGE*FISH_VIEW_RANGE && threadIndex != i)
+			if ((d_x*d_x + d_y * d_y) < FISH_VIEW_RANGE*FISH_VIEW_RANGE)
 			{
 				a_x += x[i];
 				a_y += y[i];
 				n++;
 			}
 		}
-		if (n > 0)
-		{
-			a_x = a_x / n;
-			a_y = a_y / n;
-			a_x = (a_x - x[threadIndex]);
-			a_y = (a_y - y[threadIndex]);
-			float length = sqrt(a_x * a_x + a_y * a_y);
-			if (length > 0.001)
-			{
-				a_x = a_x / length;
-				a_y = a_y / length;
-			}
-			else
-			{
-				a_x = 0;
-				a_y = 0;
-			}
-		}
-		__syncthreads();
+		a_x = a_x / n;
+		a_y = a_y / n;
 		x[threadIndex] = a_x;
 		y[threadIndex] = a_y;
 	}
@@ -147,19 +137,20 @@ extern "C" void ParallelSteering(Fish* h_fish, int count)
 	float* d_PosY;
 	cudaMalloc((void**)&d_PosX, FISH_COUNT * sizeof(float));
 	cudaMalloc((void**)&d_PosY, FISH_COUNT * sizeof(float));
-	cudaMemcpy(d_PosX, h_PosX, count * sizeof(float), cudaMemcpyHostToDevice);
-	cudaMemcpy(d_PosY, h_PosY, count * sizeof(float), cudaMemcpyHostToDevice);
+	cudaMemcpy(d_PosX, h_PosX, FISH_COUNT * sizeof(float), cudaMemcpyHostToDevice);
+	cudaMemcpy(d_PosY, h_PosY, FISH_COUNT * sizeof(float), cudaMemcpyHostToDevice);
 	FishM << <1, FISH_COUNT >> > (d_PosX, d_PosY);
-	cudaMemcpy(h_PosX, d_PosX, count * sizeof(float), cudaMemcpyDeviceToHost);
-	cudaMemcpy(h_PosY, d_PosY, count * sizeof(float), cudaMemcpyDeviceToHost);
+	cudaMemcpy(h_PosX, d_PosX, FISH_COUNT * sizeof(float), cudaMemcpyDeviceToHost);
+	cudaMemcpy(h_PosY, d_PosY, FISH_COUNT * sizeof(float), cudaMemcpyDeviceToHost);
 	cudaFree(d_PosX);
 	cudaFree(d_PosY);
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
-		h_fish[i].Position.X += h_PosX[i];
-		h_fish[i].Position.Y += h_PosY[i];
+		//h_fish[i].Position.X += h_PosX[i];
+		//h_fish[i].Position.Y += h_PosY[i];
+		printf("%d:po: %f - %f\n",i, h_PosX[i], h_PosY[i]);
+
 	}*/
-	
 	Fish* d_fish;
 	cudaMalloc((void**)&d_fish, count * sizeof(Fish));
 	cudaMemcpy(d_fish, h_fish, count * sizeof(Fish), cudaMemcpyHostToDevice);

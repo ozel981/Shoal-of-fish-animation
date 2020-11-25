@@ -90,12 +90,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CudaCompile Include="Source\GPUSteering\gpu.cu">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
-    </CudaCompile>
+    <CudaCompile Include="Source\GPUSteering\ParallelSteering.cu" />
     <CudaCompile Include="Source\Main\main.cu" />
   </ItemGroup>
   <ItemGroup>

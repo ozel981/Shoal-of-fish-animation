@@ -82,14 +82,17 @@ void Fish::Draw()
 	glVertex2f(Position.X  + leftVect.X, Position.Y + leftVect.Y);
 	// fish rear right point
 	glVertex2f(Position.X + rightVect.X, Position.Y + rightVect.Y);
+	
 	glEnd();
+	//DrawCircle(Position.X, Position.Y, FISH_VIEW_RANGE);
+	DrawCircle(Position.X, Position.Y, FISH_COLISION_RANGE);
 }
 
 #pragma endregion
 
 #pragma region Fish steering
 
-__device__ Vector Fish::VectorToTheAverageHeadingOfLocalFlockmates(Fish* fishes, int count)
+Vector Fish::VectorToTheAverageHeadingOfLocalFlockmates(Fish* fishes, int count)
 {
 	Vector avarageDirection = Vector(Direction.X, Direction.Y);
 	int n = 1;
@@ -111,7 +114,7 @@ __device__ Vector Fish::VectorToTheAverageHeadingOfLocalFlockmates(Fish* fishes,
 	return avarageDirection;
 }
 
-__device__ Vector Fish::VectorToTheAveragePositionOfLocalFlockmates(Fish* fishes, int count)
+Vector Fish::VectorToTheAveragePositionOfLocalFlockmates(Fish* fishes, int count)
 {
 	Point avaragePosition = Point(Position.X, Position.Y);
 	int n = 1;
@@ -133,7 +136,7 @@ __device__ Vector Fish::VectorToTheAveragePositionOfLocalFlockmates(Fish* fishes
 	return directionToAvaragePosition;
 }
 
-__device__ Vector Fish::VectorToAvoidCrowdingLocalFlockmates(Fish* fishes, int count)
+Vector Fish::VectorToAvoidCrowdingLocalFlockmates(Fish* fishes, int count)
 {
 	Vector resultantVersor = Vector(0, 0);
 	for (int i = 0; i < count; i++)

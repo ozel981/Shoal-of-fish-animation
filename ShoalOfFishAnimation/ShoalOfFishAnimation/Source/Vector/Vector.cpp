@@ -1,5 +1,6 @@
 #include "Vector.h"
 #include <math.h>
+#include <algorithm>
 
 
 #pragma region Constructors
@@ -15,15 +16,23 @@ Vector::Vector(float x, float y)
 void Vector::Normalize()
 {
 	float length = Length();
-	X /= length;
-	Y /= length;
+	if (fabs(length) > std::numeric_limits<float>::epsilon())
+	{
+		X /= length;
+		Y /= length;
+	}
 }
 
 Vector Vector::Normalized()
 {
 	float length = Length();
-	float x = X / length;
-	float y = Y / length;
+	float x = 0;
+	float y = 0;
+	if (fabs(length) > std::numeric_limits<float>::epsilon())
+	{
+		x = X / length;
+		y = Y / length;
+	}
 	return Vector(x, y);
 }
 
@@ -48,7 +57,11 @@ Vector Vector::operator*(float a)
 
 Vector Vector::operator/(float a)
 {
-	return Vector(X / a, Y / a);
+	if (a > std::numeric_limits<float>::epsilon())
+	{
+		return Vector(X / a, Y / a);
+	}
+	return Vector(X, Y);
 }
 
 void Vector::operator+=(Vector vector)
@@ -71,7 +84,7 @@ void Vector::operator*=(float a)
 
 void Vector::operator/=(float a)
 {
-	if (fabs(a) > 0.0001)
+	if (fabs(a) > std::numeric_limits<float>::epsilon())
 	{
 		X /= a;
 		Y /= a;

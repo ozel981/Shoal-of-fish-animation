@@ -8,14 +8,14 @@
 
 class AnimationWindow
 {
-private:
-	bool isCPU;
+public:
+	bool isCPUx = true;
 
 	Fish FishShol[FISH_COUNT];
 public:
 	AnimationWindow(bool isCPU);
 	~AnimationWindow();
-	bool IsCPU() { return isCPU; }
+	bool IsCPU() { return isCPUx; }
 	void Run();
 
 	#pragma region Friend functions

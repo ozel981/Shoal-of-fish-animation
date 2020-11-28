@@ -1,6 +1,7 @@
 //For test time
 #include <iostream>
 #include <chrono> 
+#include <cstdlib>
 //
 #include <GL/glew.h>
 #include <GL/freeglut.h>
@@ -37,13 +38,13 @@ bool AnimationRun = true;
 
 AnimationWindow::AnimationWindow(bool isCPU)
 {
-	this->isCPU = isCPU;
+	this->isCPUx = isCPU;
 
 	srand(time(NULL));
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
-		float x = MATRIX_HALF_WIDTH - (float)(rand() % (int)(2 * MATRIX_HALF_WIDTH));
-		float y = MATRIX_HALF_HEIGHT - (float)(rand() % (int)(2 * MATRIX_HALF_HEIGHT));
+		float x = MATRIX_HALF_WIDTH/2 - (float)(rand() % (int)(2 * MATRIX_HALF_WIDTH/2));
+		float y = MATRIX_HALF_HEIGHT/2 - (float)(rand() % (int)(2 * MATRIX_HALF_HEIGHT/2));
 		FishShol[i] = Fish(Point(x, y), rand() % 360);
 	}
 }
@@ -118,14 +119,17 @@ void Timer(int)
 		SteerSequential(animationWindow->FishShol, FISH_COUNT);
 		auto finish = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsed = finish - start;
+		//system("cls");
 		std::cout << "Elapsed time: " << elapsed.count() << " s\n";
 	}
 	else
 	{
+
 		auto start = std::chrono::high_resolution_clock::now();
 		ParallelSteering(animationWindow->FishShol, FISH_COUNT);
 		auto finish = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsed = finish - start;
+		//system("cls");
 		std::cout << "Elapsed time: " << elapsed.count() << " s\n";
 	}
 }

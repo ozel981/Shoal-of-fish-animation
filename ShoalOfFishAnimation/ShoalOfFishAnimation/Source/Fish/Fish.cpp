@@ -100,8 +100,11 @@ Vector Fish::VectorToTheAverageHeadingOfLocalFlockmates(Fish* fishes, int count)
 	{
 		float x = fishes[i].Position.X;
 		float y = fishes[i].Position.Y;
-		if (fabs(x - Position.X) < 0.001 && fabs(y - Position.Y) < 0.001) continue;
-		if (sqrt((Position.X - x)*(Position.X - x) + (Position.Y - y)*(Position.Y - y)) < FISH_VIEW_RANGE)
+		if (fabs(x - Position.X) < FLOAT_EPSILON && fabs(y - Position.Y) < FLOAT_EPSILON)
+		{
+			continue;
+		}
+		if (((Position.X-x)*(Position.X-x)+(Position.Y-y)*(Position.Y-y)) < FISH_VIEW_RANGE*FISH_VIEW_RANGE)
 		{
 			avarageDirection += fishes[i].Direction;
 			n++;
@@ -111,7 +114,7 @@ Vector Fish::VectorToTheAverageHeadingOfLocalFlockmates(Fish* fishes, int count)
 	{
 		avarageDirection.Normalize();
 	}
-	return avarageDirection;
+	return (avarageDirection * 2);
 }
 
 Vector Fish::VectorToTheAveragePositionOfLocalFlockmates(Fish* fishes, int count)
@@ -122,18 +125,24 @@ Vector Fish::VectorToTheAveragePositionOfLocalFlockmates(Fish* fishes, int count
 	{
 		float x = fishes[i].Position.X;
 		float y = fishes[i].Position.Y;
-		if (x == Position.X && y == Position.Y) continue;
-		if (sqrt((Position.X - x)*(Position.X - x) + (Position.Y - y)*(Position.Y - y)) < FISH_VIEW_RANGE)
+		if (fabs(x - Position.X) < FLOAT_EPSILON && fabs(y - Position.Y) < FLOAT_EPSILON)
 		{
-			n++;
+			continue;
+		}
+		if (((Position.X - x)*(Position.X - x) + (Position.Y - y)*(Position.Y - y)) < FISH_VIEW_RANGE*FISH_VIEW_RANGE)
+		{
 			avaragePosition += fishes[i].Position;
+			n++;
 		}
 	}
 	avaragePosition /= n;
-	if (fabs(avaragePosition.X - Position.X) < 0.01 && fabs(avaragePosition.Y - Position.Y) < 0.01) return Vector(0,0);
+	if (fabs(avaragePosition.X - Position.X) < FLOAT_EPSILON && fabs(avaragePosition.Y - Position.Y) < FLOAT_EPSILON)
+	{
+		return Vector(0, 0);
+	}
 	Vector directionToAvaragePosition = Vector(avaragePosition.X - Position.X, avaragePosition.Y - Position.Y);
 	directionToAvaragePosition.Normalize();
-	return directionToAvaragePosition;
+	return (directionToAvaragePosition*0.3);
 }
 
 Vector Fish::VectorToAvoidCrowdingLocalFlockmates(Fish* fishes, int count)
@@ -143,16 +152,20 @@ Vector Fish::VectorToAvoidCrowdingLocalFlockmates(Fish* fishes, int count)
 	{
 		float x = fishes[i].Position.X;
 		float y = fishes[i].Position.Y;
-		if (fabs(x - Position.X) < 0.001 && (y - Position.Y) < 0.001) continue;
+		if (fabs(x - Position.X) < FLOAT_EPSILON && fabs(y - Position.Y) < FLOAT_EPSILON)
+		{
+			continue;
+		}
 		Vector fromLocalToNeigh = Vector(x - Position.X, y - Position.Y);
-		if (fromLocalToNeigh.Length() <= (FISH_COLISION_RANGE * 2))
+		float fishDistance = fromLocalToNeigh.Length();
+		if (fishDistance <= (FISH_COLISION_RANGE * 2))
 		{
 			fromLocalToNeigh.Normalize();
-			fromLocalToNeigh *= ((FISH_COLISION_RANGE * 2) - fromLocalToNeigh.Length());
+			fromLocalToNeigh *= (FISH_COLISION_RANGE * 2) - fishDistance;
 			resultantVersor -= fromLocalToNeigh;
 		}
 	}
-	return resultantVersor;
+	return (resultantVersor*0.06);
 }
 
 #pragma endregion

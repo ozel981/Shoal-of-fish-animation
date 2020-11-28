@@ -25,6 +25,16 @@
 #define __ballot_sync() (0)
 #endif
 
+#define gpuErrchk(ans) { gpuAssert((ans), __FILE__, __LINE__); }
+inline void gpuAssert(cudaError_t code, const char *file, int line, bool abort = true)
+{
+	if (code != cudaSuccess)
+	{
+		fprintf(stderr, "GPUassert: %s %s %d\n", cudaGetErrorString(code), file, line);
+		if (abort) exit(code);
+	}
+}
+
 __device__ struct CudaVector
 {
 public:
@@ -183,6 +193,7 @@ extern "C" void FinalizeParallerlSteering()
 extern "C" void ParallelSteering(Fish* h_fish, int count)
 {
 	MoveFish << <1 + (FISH_COUNT/1024), 1024 >> > (d_fish);
+	gpuErrchk(cudaPeekAtLastError());
 	cudaThreadSynchronize();
 	cudaMemcpy(h_fish, d_fish, count * sizeof(Fish), cudaMemcpyDeviceToHost);	
 }

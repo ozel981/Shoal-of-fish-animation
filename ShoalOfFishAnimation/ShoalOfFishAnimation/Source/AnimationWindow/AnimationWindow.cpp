@@ -30,8 +30,8 @@ void Init();
 void Reshape(int, int);
 void KeyboardInput(unsigned char, int, int);
 
-extern "C" void ParallelSteering(Fish* h_fish, int count);
-extern "C" void InitParallerlSteering(Fish* h_fish, int count);
+extern "C" void ParallelSteering(Fish* h_fish, float MouseX, float MouseY);
+extern "C" void InitParallerlSteering(Fish* h_fish);
 extern "C" void FinalizeParallerlSteering();
 
 AnimationWindow* animationWindow = &AnimationWindow(true);
@@ -130,7 +130,7 @@ void AnimationWindow::Run()
 
 	if (!(animationWindow->IsCPU()))
 	{
-		InitParallerlSteering(animationWindow->FishShol, FISH_COUNT);
+		InitParallerlSteering(animationWindow->FishShol);
 	}
 
 
@@ -174,7 +174,7 @@ void Timer(int)
 	{
 
 		auto start = std::chrono::high_resolution_clock::now();
-		ParallelSteering(animationWindow->FishShol, FISH_COUNT);
+		ParallelSteering(animationWindow->FishShol, mouseX, mouseY);
 		auto finish = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsed = finish - start;
 		//system("cls");

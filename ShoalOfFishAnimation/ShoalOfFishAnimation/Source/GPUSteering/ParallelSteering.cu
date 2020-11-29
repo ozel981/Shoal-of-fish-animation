@@ -47,7 +47,7 @@ __device__ CudaVector::CudaVector(float x, float y)
 	this->Y = y;
 }
 
-__global__ void MoveFish(Fish *fish)
+__global__ void MoveFish(Fish *fish, float mouseX, float mouseY)
 {
 	int threadIndex = threadIdx.x;
 	int blockIndex = blockIdx.x;
@@ -144,11 +144,21 @@ __global__ void MoveFish(Fish *fish)
 			}
 		}
 		#pragma endregion
+		CudaVector avoidMouse = CudaVector(0, 0);
+		#pragma region AvoidingMouse
+		float dist = sqrt((mouseX - fishPositionX)*(mouseX - fishPositionX) + (mouseY - fishPositionY)*(mouseY - fishPositionY));
+		if (dist <= MOUSE_FEAR_DISTANCE)
+		{
+			avoidMouse.X = ((fishPositionX - mouseX) / dist) * (MOUSE_FEAR_DISTANCE - dist);
+			avoidMouse.Y = ((fishPositionY - mouseY) / dist) * (MOUSE_FEAR_DISTANCE - dist);
+		}
+		#pragma endregion
+
 		
 
 		__syncthreads();
-		float x_move = groupingDirection.X + antyCrowdingVector.X * 0.3 + averageDirection.X * fish[threadIndex].Settings.speed;
-		float y_move = groupingDirection.Y + antyCrowdingVector.Y * 0.3 + averageDirection.Y * fish[threadIndex].Settings.speed;
+		float x_move = groupingDirection.X + antyCrowdingVector.X * 0.3 + averageDirection.X * fish[threadIndex].Settings.speed + avoidMouse.X;
+		float y_move = groupingDirection.Y + antyCrowdingVector.Y * 0.3 + averageDirection.Y * fish[threadIndex].Settings.speed + avoidMouse.Y;
 		fish[threadIndex].Position.X += x_move;
 		fish[threadIndex].Position.Y += y_move;
 
@@ -175,18 +185,27 @@ __global__ void MoveFish(Fish *fish)
 		}
 		#pragma endregion
 		
-		fish[threadIndex].Direction.X = averageDirection.X;
-		fish[threadIndex].Direction.Y = averageDirection.Y;
+		float directionLength = sqrt((averageDirection.X + avoidMouse.X) * (averageDirection.X + avoidMouse.X) + (averageDirection.Y + avoidMouse.Y)*(averageDirection.Y + avoidMouse.Y));
+		if (directionLength > 0.0001)
+		{
+			fish[threadIndex].Direction.X = (averageDirection.X + avoidMouse.X) / directionLength;
+			fish[threadIndex].Direction.Y = (averageDirection.Y + avoidMouse.Y) / directionLength;
+		}
+		else
+		{
+			fish[threadIndex].Direction.X = averageDirection.X;
+			fish[threadIndex].Direction.Y = averageDirection.Y;
+		}
 	}
 
 }
 
 Fish* d_fish;
 
-extern "C" void InitParallerlSteering(Fish* h_fish, int count)
+extern "C" void InitParallerlSteering(Fish* h_fish)
 {
-	cudaMalloc((void**)&d_fish, count * sizeof(Fish));
-	cudaMemcpy(d_fish, h_fish, count * sizeof(Fish), cudaMemcpyHostToDevice);
+	cudaMalloc((void**)&d_fish, FISH_COUNT * sizeof(Fish));
+	cudaMemcpy(d_fish, h_fish, FISH_COUNT * sizeof(Fish), cudaMemcpyHostToDevice);
 }
 
 extern "C" void FinalizeParallerlSteering()
@@ -194,11 +213,11 @@ extern "C" void FinalizeParallerlSteering()
 	cudaFree(d_fish);
 }
 
-extern "C" void ParallelSteering(Fish* h_fish, int count)
+extern "C" void ParallelSteering(Fish* h_fish, float MouseX, float MouseY)
 {
-	MoveFish << <1 + (FISH_COUNT/1024), 1024 >> > (d_fish);
+	MoveFish << <1 + (FISH_COUNT/1024), 1024 >> > (d_fish, MouseX, MouseY);
 	gpuErrchk(cudaPeekAtLastError());
 	cudaThreadSynchronize();
-	cudaMemcpy(h_fish, d_fish, count * sizeof(Fish), cudaMemcpyDeviceToHost);	
+	cudaMemcpy(h_fish, d_fish, FISH_COUNT * sizeof(Fish), cudaMemcpyDeviceToHost);
 }
 

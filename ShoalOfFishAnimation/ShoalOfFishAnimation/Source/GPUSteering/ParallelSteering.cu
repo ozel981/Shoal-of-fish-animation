@@ -59,6 +59,7 @@ __global__ void MoveFish(Fish *fish)
 
 		CudaVector averageDirection = CudaVector(fish[threadIndex].Direction.X, fish[threadIndex].Direction.Y);
 		#pragma region SteerToTheAverageHeadingOfLocalFlockmates
+		if(!fish[threadIndex].Settings.independence)
 		{
 			for (int i = 0; i < FISH_COUNT; i++)
 			{
@@ -87,6 +88,7 @@ __global__ void MoveFish(Fish *fish)
 		#pragma endregion
 		CudaVector groupingDirection = CudaVector(0, 0);
 		#pragma region SteerToTheAveragePositionOfLocalFlockmates
+		if(fish[threadIndex].Settings.grouping)
 		{
 			CudaVector groupingPoint = CudaVector(fishPositionX, fishPositionY);
 			int n = 1;
@@ -119,6 +121,7 @@ __global__ void MoveFish(Fish *fish)
 		#pragma endregion
 		CudaVector antyCrowdingVector = CudaVector(0, 0);
 		#pragma region SteerToAvoidCrowdingLocalFlockmates
+		if(fish[threadIndex].Settings.grouping)
 		{
 			for (int i = 0; i < FISH_COUNT; i++)
 			{
@@ -129,22 +132,23 @@ __global__ void MoveFish(Fish *fish)
 				float fromLocalToNeigh_X = x - fish[threadIndex].Position.X;
 				float fromLocalToNeigh_Y = y - fish[threadIndex].Position.Y;
 				float fromLocalToNeighDist = sqrt((fromLocalToNeigh_X*fromLocalToNeigh_X) + (fromLocalToNeigh_Y*fromLocalToNeigh_Y));
-				if (fromLocalToNeighDist <= (FISH_COLISION_RANGE * 2))
+				if (fromLocalToNeighDist <= (FISH_COLISION_RANGE * fish[i].Settings.size + FISH_COLISION_RANGE * fish[threadIndex].Settings.size))
 				{
 					fromLocalToNeigh_X /= fromLocalToNeighDist;
 					fromLocalToNeigh_Y /= fromLocalToNeighDist;
-					fromLocalToNeigh_X *= ((FISH_COLISION_RANGE * 2) - fromLocalToNeighDist);
-					fromLocalToNeigh_Y *= ((FISH_COLISION_RANGE * 2) - fromLocalToNeighDist);
+					fromLocalToNeigh_X *= ((FISH_COLISION_RANGE * fish[i].Settings.size + FISH_COLISION_RANGE * fish[threadIndex].Settings.size) - fromLocalToNeighDist);
+					fromLocalToNeigh_Y *= ((FISH_COLISION_RANGE * fish[i].Settings.size + FISH_COLISION_RANGE * fish[threadIndex].Settings.size) - fromLocalToNeighDist);
 					antyCrowdingVector.X -= fromLocalToNeigh_X;
 					antyCrowdingVector.Y -= fromLocalToNeigh_Y;
 				}
 			}
 		}
 		#pragma endregion
+		
 
 		__syncthreads();
-		float x_move = groupingDirection.X + antyCrowdingVector.X * 0.3 + averageDirection.X * 2;
-		float y_move = groupingDirection.Y + antyCrowdingVector.Y * 0.3 + averageDirection.Y * 2;
+		float x_move = groupingDirection.X + antyCrowdingVector.X * 0.3 + averageDirection.X * fish[threadIndex].Settings.speed;
+		float y_move = groupingDirection.Y + antyCrowdingVector.Y * 0.3 + averageDirection.Y * fish[threadIndex].Settings.speed;
 		fish[threadIndex].Position.X += x_move;
 		fish[threadIndex].Position.Y += y_move;
 

@@ -9,10 +9,11 @@
 
 #pragma region Constructors
 
-Fish::Fish(Point position, float direction)
+Fish::Fish(Point position, float direction, FishSettings settings)
 {
 	this->Position = Point(position.X,position.Y);
 	this->Direction = Vector(TargetPoint_X(direction), TargetPoint_Y(direction)).Normalized();
+	this->Settings = settings;
 }
 Fish::Fish()
 {
@@ -54,6 +55,11 @@ void Fish::MoveBy(Vector vector)
 
 #pragma region Draw
 
+void Fish::SetOwnColor()
+{
+	glColor3f(Settings.color_R, Settings.color_G, Settings.color_B);
+}
+
 void DrawCircle(float cx, float cy, float r) {
 	glBegin(GL_LINE_LOOP);
 	for (int ii = 0; ii < 10000; ii++) {
@@ -68,8 +74,9 @@ void DrawCircle(float cx, float cy, float r) {
 void Fish::Draw()
 {
 	glBegin(GL_TRIANGLES);
+	SetOwnColor();
 	// fish front point
-	glVertex2f(Position.X + (Direction.X * FISH_FRON_LENGTH), Position.Y + (Direction.Y * FISH_FRON_LENGTH));
+	glVertex2f(Position.X + (Direction.X * FISH_FRON_LENGTH)*Settings.size, Position.Y + (Direction.Y * FISH_FRON_LENGTH)*Settings.size);
 	Vector leftVect = Vector(-Direction.Y, Direction.X);
 	leftVect *= FISH_SIDE_THICKNESS;
 	Vector rightVect = Vector(Direction.Y, -Direction.X);
@@ -79,9 +86,9 @@ void Fish::Draw()
 	leftVect += rearVect;
 	rightVect += rearVect;
 	// fish rear left point
-	glVertex2f(Position.X  + leftVect.X, Position.Y + leftVect.Y);
+	glVertex2f(Position.X  + leftVect.X * Settings.size, Position.Y + leftVect.Y * Settings.size);
 	// fish rear right point
-	glVertex2f(Position.X + rightVect.X, Position.Y + rightVect.Y);
+	glVertex2f(Position.X + rightVect.X * Settings.size, Position.Y + rightVect.Y * Settings.size);
 	
 	glEnd();
 	//DrawCircle(Position.X, Position.Y, FISH_VIEW_RANGE);
@@ -94,6 +101,7 @@ void Fish::Draw()
 
 Vector Fish::VectorToTheAverageHeadingOfLocalFlockmates(Fish* fishes, int count)
 {
+	if (Settings.independence) return Vector(Direction.X, Direction.Y);
 	Vector avarageDirection = Vector(Direction.X, Direction.Y);
 	int n = 1;
 	for (int i = 0; i < count; i++)
@@ -113,12 +121,21 @@ Vector Fish::VectorToTheAverageHeadingOfLocalFlockmates(Fish* fishes, int count)
 	if (n > 1)
 	{
 		avarageDirection.Normalize();
+		avarageDirection *= Settings.speed;
 	}
-	return (avarageDirection * 2);
+	return (avarageDirection);
+}
+
+Vector Fish::AvoidMouse(float x, float y)
+{
+	float dist = sqrt((x - Position.X)*(x - Position.X) + (y - Position.Y)*(y - Position.Y));
+	if (dist > MOUSE_FEAR_DISTANCE) return  Vector(0, 0);
+	else return (Vector(Position.X - x, Position.Y - y).Normalized()) * (MOUSE_FEAR_DISTANCE - dist);
 }
 
 Vector Fish::VectorToTheAveragePositionOfLocalFlockmates(Fish* fishes, int count)
 {
+	if (!Settings.grouping) return Vector(0, 0);
 	Point avaragePosition = Point(Position.X, Position.Y);
 	int n = 1;
 	for (int i = 0; i < count; i++)
@@ -142,11 +159,12 @@ Vector Fish::VectorToTheAveragePositionOfLocalFlockmates(Fish* fishes, int count
 	}
 	Vector directionToAvaragePosition = Vector(avaragePosition.X - Position.X, avaragePosition.Y - Position.Y);
 	directionToAvaragePosition.Normalize();
-	return (directionToAvaragePosition*0.3);
+	return (directionToAvaragePosition);
 }
 
 Vector Fish::VectorToAvoidCrowdingLocalFlockmates(Fish* fishes, int count)
 {
+	if (!Settings.grouping) return Vector(0, 0);
 	Vector resultantVersor = Vector(0, 0);
 	for (int i = 0; i < count; i++)
 	{
@@ -158,14 +176,14 @@ Vector Fish::VectorToAvoidCrowdingLocalFlockmates(Fish* fishes, int count)
 		}
 		Vector fromLocalToNeigh = Vector(x - Position.X, y - Position.Y);
 		float fishDistance = fromLocalToNeigh.Length();
-		if (fishDistance <= (FISH_COLISION_RANGE * 2))
+		if (fishDistance <= (FISH_COLISION_RANGE * Settings.size + FISH_COLISION_RANGE * fishes[i].Settings.size))
 		{
 			fromLocalToNeigh.Normalize();
-			fromLocalToNeigh *= (FISH_COLISION_RANGE * 2) - fishDistance;
+			fromLocalToNeigh *= (FISH_COLISION_RANGE * Settings.size + FISH_COLISION_RANGE * fishes[i].Settings.size) - fishDistance;
 			resultantVersor -= fromLocalToNeigh;
 		}
 	}
-	return (resultantVersor*0.06);
+	return (resultantVersor*0.3);
 }
 
 #pragma endregion

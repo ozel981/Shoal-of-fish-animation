@@ -3,19 +3,20 @@
 
 #pragma region Matrix
 
-#define MATRIX_HALF_WIDTH 500.0
-#define MATRIX_HALF_HEIGHT 500.0
+#define MATRIX_HALF_WIDTH 400.0
+#define MATRIX_HALF_HEIGHT 400.0
 
 #pragma endregion
 
 #pragma region Fish
 
-#define FISH_COUNT 200
+#define FISH_COUNT 100
 #define FISH_SIDE_THICKNESS 6.0
 #define FISH_FRON_LENGTH 16.0
 #define FISH_BACK_LENGTH 4.0
 #define FISH_VIEW_RANGE 100.0
 #define FISH_COLISION_RANGE 14.0
+#define MOUSE_FEAR_DISTANCE 100.0
 
 #pragma endregion
 
@@ -32,4 +33,12 @@
 #define FLOAT_EPSILON std::numeric_limits<float>::epsilon()
 
 #pragma endregion
+
+#pragma region Window
+
+#define WIDTH 700.0
+#define HEIGHT 500.0
+
+#pragma endregion
+
 

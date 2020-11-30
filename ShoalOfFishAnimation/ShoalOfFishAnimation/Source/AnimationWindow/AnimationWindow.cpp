@@ -30,8 +30,8 @@ void Reshape(int, int);
 void KeyboardInput(unsigned char, int, int);
 
 extern "C" void ParallelSteering(Fish* h_fish, float MouseX, float MouseY);
-extern "C" void InitParallerlSteering(Fish* h_fish);
-extern "C" void FinalizeParallerlSteering();
+extern "C" void InitParallelSteering(Fish* h_fish);
+extern "C" void FinalizeParallelSteering();
 
 AnimationWindow* animationWindow = &AnimationWindow(true);
 float mouseX=-MATRIX_HALF_WIDTH, mouseY = -MATRIX_HALF_HEIGHT;
@@ -82,7 +82,7 @@ AnimationWindow::AnimationWindow(bool isCPU)
 
 AnimationWindow::~AnimationWindow()
 {
-	FinalizeParallerlSteering();
+	FinalizeParallelSteering();
 }
 
 void AnimationWindow::Run()
@@ -111,7 +111,7 @@ void AnimationWindow::Run()
 
 	if (!(animationWindow->IsCPU()))
 	{
-		InitParallerlSteering(animationWindow->FishShol);
+		InitParallelSteering(animationWindow->FishShol);
 	}
 
 
@@ -149,7 +149,7 @@ void Timer(int)
 		SteerSequential(animationWindow->FishShol, FISH_COUNT, mouseX, mouseY);
 		auto finish = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsed = finish - start;
-		//std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+		std::cout << "Elapsed time: " << elapsed.count() << " s\n";
 	}
 	else
 	{
@@ -159,14 +159,14 @@ void Timer(int)
 		auto finish = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsed = finish - start;
 		//system("cls");
-		//std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+		std::cout << "Elapsed time: " << elapsed.count() << " s\n";
 	}
 }
 void CloseWindow()
 {
 	AnimationRun = false;
 	Sleep(100);
-	FinalizeParallerlSteering();
+	FinalizeParallelSteering();
 }
 
 void Init()

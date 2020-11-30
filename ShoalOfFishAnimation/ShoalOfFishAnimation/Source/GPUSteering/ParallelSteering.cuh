@@ -3,5 +3,5 @@
 
 
 extern "C" void ParallelSteering(Fish* h_fish, float MouseX, float MouseY);
-extern "C" void InitParallerlSteering(Fish* h_fish);
-extern "C" void FinalizeParallerlSteering();
+extern "C" void InitParallelSteering(Fish* h_fish);
+extern "C" void FinalizeParallelSteering();

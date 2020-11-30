@@ -1,6 +1,6 @@
 #pragma once
 #include "../Fish/Fish.h"
-#include "../Constant/Costant.h"
+#include "../Constant/Constant.h"
 
 void SteerSequential(Fish* fish, int count, float mouseX, float mouseY)
 {

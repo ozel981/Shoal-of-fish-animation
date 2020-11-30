@@ -1,7 +1,7 @@
 #pragma once
 #include <time.h>
 
-#include "../Constant/Costant.h"
+#include "../Constant/Constant.h"
 #include "../Fish/Fish.h"
 
 

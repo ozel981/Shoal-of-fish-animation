@@ -4,7 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <algorithm> 
 #include <math.h>
-#include "../Constant/Costant.h"
+#include "../Constant/Constant.h"
 #include "../Point/Point.h"
 
 #pragma region Constructors

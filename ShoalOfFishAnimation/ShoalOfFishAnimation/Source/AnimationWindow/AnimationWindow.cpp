@@ -9,12 +9,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <time.h>
 
 #include "AnimationWindow.h"
 #include "../Fish/Fish.h"
-#include "../Fish/FishTypes.h"
-#include "../Constant/Costant.h"
+#include "../Fish/FishFactory.h"
+#include "../Constant/Constant.h"
 #include "../CPUSteering/SequentialSteering.h"
 #include "../GPUSteering/ParallelSteering.cuh"
 
@@ -44,11 +43,15 @@ AnimationWindow::AnimationWindow(bool isCPU)
 {
 	this->isCPUx = isCPU;
 
-	srand(time(NULL));
+	NormalFishFactory normalFishFactory = NormalFishFactory();
+	FastFishFactory fastFishFactory = FastFishFactory();
+	SmallFishFactory smallFishFactory = SmallFishFactory();
+	BigFishFactory bigFishFactory = BigFishFactory();
+
+
 	for (int i = 0; i < FISH_COUNT; i++)
 	{
-		float x = MATRIX_HALF_WIDTH/2 - (float)(rand() % (int)(2 * MATRIX_HALF_WIDTH/2));
-		float y = MATRIX_HALF_HEIGHT/2 - (float)(rand() % (int)(2 * MATRIX_HALF_HEIGHT/2));
+		
 		int fishKinf = 0;
 		if (i == 0) fishKinf = 0;
 		else if (i == 1) fishKinf = 33;
@@ -58,41 +61,19 @@ AnimationWindow::AnimationWindow(bool isCPU)
 
 		if (fishKinf < 33) // Normal fish
 		{
-			FishShol[i] = Fish(Point(x, y), rand() % 360, FishSettings());//NormalFish(Point(x, y), rand() % 360);
+			FishShol[i] = normalFishFactory.Create();
 		}
 		else if (fishKinf < 66) // Fast fish
 		{
-			FishSettings settings = FishSettings();
-			settings.color_R = 1;
-			settings.color_G = 0;
-			settings.color_B = 0;
-
-			settings.speed = 20;
-			FishShol[i] = Fish(Point(x, y), rand() % 360, settings);
+			FishShol[i] = fastFishFactory.Create();
 		}
 		else if (fishKinf < 99) // Small fihs
 		{
-			FishSettings settings = FishSettings();
-			settings.color_R = 1;
-			settings.color_G = 1;
-			settings.color_B = 0;
-
-			settings.size = 0.5;
-			FishShol[i] = Fish(Point(x, y), rand() % 360, settings);
+			FishShol[i] = smallFishFactory.Create();
 		}
 		else // Big fish
 		{
-			FishSettings settings = FishSettings();
-			settings.color_R = 0;
-			settings.color_G = 0.6;
-			settings.color_B = 0;
-
-			settings.speed = 0.5;
-			settings.size = 3;
-
-			settings.grouping = false;
-			settings.independence = true;
-			FishShol[i] = Fish(Point(x, y), rand() % 360, settings);
+			FishShol[i] = bigFishFactory.Create();
 		}
 	}
 }

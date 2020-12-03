@@ -4,7 +4,6 @@
 
 void SteerSequential(Fish* fish, int count, float mouseX, float mouseY)
 {
-	printf("%fx%f\n", mouseX, mouseY);
 	Vector directionVectors[FISH_COUNT];
 	Vector groupingVectors[FISH_COUNT];
 	for (int i = 0; i < FISH_COUNT; i++)

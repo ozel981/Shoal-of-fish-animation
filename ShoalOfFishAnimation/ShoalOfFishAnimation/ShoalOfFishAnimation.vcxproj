@@ -94,9 +94,11 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="Source\Main\main.cu" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Constant\Costant.h" />
+    <ClInclude Include="Source\Constant\Constant.h" />
     <ClInclude Include="Source\CPUSteering\SequentialSteering.h" />
     <ClInclude Include="Source\Fish\Fish.h" />
+    <ClInclude Include="Source\Fish\FishSettings.h" />
+    <ClInclude Include="Source\Fish\FishFactory.h" />
     <ClInclude Include="Source\GPUSteering\ParallelSteering.cuh" />
     <ClInclude Include="Source\Point\Point.h" />
     <ClInclude Include="Source\AnimationWindow\AnimationWindow.h" />
@@ -104,6 +106,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Fish\Fish.cpp" />
+    <ClCompile Include="Source\Fish\FishSettings.cpp" />
     <ClCompile Include="Source\Point\Point.cpp" />
     <ClCompile Include="Source\AnimationWindow\AnimationWindow.cpp" />
     <ClCompile Include="Source\Vector\Vector.cpp" />

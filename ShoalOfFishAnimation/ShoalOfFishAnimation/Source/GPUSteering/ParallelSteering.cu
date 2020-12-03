@@ -5,6 +5,8 @@
 
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
+#include <string>
+#include <sstream>
 
 #include "../Vector/Vector.h"
 #include "../Point/Point.h"
@@ -200,25 +202,40 @@ __global__ void MoveFish(Fish *fish, float mouseX, float mouseY)
 }
 #pragma endregion
 
-
-Fish* d_fish;
-
-extern "C" void InitParallelSteering(Fish* h_fish)
+extern "C"  std::string ParallelSteering(Fish* h_fish, float MouseX, float MouseY) 
 {
-	cudaMalloc((void**)&d_fish, FISH_COUNT * sizeof(Fish));
-	cudaMemcpy(d_fish, h_fish, FISH_COUNT * sizeof(Fish), cudaMemcpyHostToDevice);
-}
+	Fish* d_fish;
+	double mallocTime = 0;
+	double calcualtionTime = 0;
 
-extern "C" void FinalizeParallelSteering()
-{
-	cudaFree(d_fish);
-}
+	auto start = std::chrono::high_resolution_clock::now();
+	#pragma region HostToDevice
+		cudaMalloc((void**)&d_fish, FISH_COUNT * sizeof(Fish));
+		cudaMemcpy(d_fish, h_fish, FISH_COUNT * sizeof(Fish), cudaMemcpyHostToDevice);
+	#pragma endregion
+	auto finish = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> elapsedMem = (finish - start);
 
-extern "C" void ParallelSteering(Fish* h_fish, float MouseX, float MouseY)
-{
-	MoveFish << <1 + (FISH_COUNT/1024), 1024 >> > (d_fish, MouseX, MouseY);
-	gpuErrchk(cudaPeekAtLastError());
-	cudaThreadSynchronize();
-	cudaMemcpy(h_fish, d_fish, FISH_COUNT * sizeof(Fish), cudaMemcpyDeviceToHost);
+	start = std::chrono::high_resolution_clock::now();
+	#pragma region Calcualtion
+		MoveFish << <1 + (FISH_COUNT / 1024), 1024 >> > (d_fish, MouseX, MouseY);
+		gpuErrchk(cudaPeekAtLastError());
+		cudaThreadSynchronize();
+	#pragma endregion
+	finish = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> elapsedCal = (finish - start);
+
+	start = std::chrono::high_resolution_clock::now();
+	#pragma region DeviceToHost
+		cudaMemcpy(h_fish, d_fish, FISH_COUNT * sizeof(Fish), cudaMemcpyDeviceToHost);
+		cudaFree(d_fish);
+	#pragma endregion	
+	finish = std::chrono::high_resolution_clock::now();
+	elapsedMem += (finish - start);
+
+	std::stringstream streams;
+	streams << std::fixed << "| Calcualtion time : " << elapsedCal.count() << "s | Data copying time: " << elapsedMem.count() << "s ";
+
+	return streams.str();
 }
 

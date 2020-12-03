@@ -406,10 +406,17 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\system_error
 C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\cerrno
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\share.h
 d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../AnimationWindow/AnimationWindow.h
-d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\animationwindow\../Constant/Costant.h
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\animationwindow\../Constant/Constant.h
 C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\algorithm
 C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xmemory
 d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\animationwindow\../Fish/Fish.h
 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\include\cuda_runtime.h
+D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\ShoalOfFishAnimation\include\GL/glew.h
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\um\GL/glu.h
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\shared\winapifamily.h
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\shared\winpackagefamily.h
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\um\GL/gl.h
 d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\../Point/Point.h
 d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\../Vector/Vector.h
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\fish\FishSettings.h
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h

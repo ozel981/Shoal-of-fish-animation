@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string>
 
 #include "AnimationWindow.h"
 #include "../Fish/Fish.h"
@@ -29,9 +30,7 @@ void Init();
 void Reshape(int, int);
 void KeyboardInput(unsigned char, int, int);
 
-extern "C" void ParallelSteering(Fish* h_fish, float MouseX, float MouseY);
-extern "C" void InitParallelSteering(Fish* h_fish);
-extern "C" void FinalizeParallelSteering();
+extern "C" std::string ParallelSteering(Fish* h_fish, float MouseX, float MouseY);
 
 AnimationWindow* animationWindow = &AnimationWindow(true);
 float mouseX=-MATRIX_HALF_WIDTH, mouseY = -MATRIX_HALF_HEIGHT;
@@ -82,13 +81,17 @@ AnimationWindow::AnimationWindow(bool isCPU)
 
 AnimationWindow::~AnimationWindow()
 {
-	FinalizeParallelSteering();
+
 }
 
 void AnimationWindow::Run()
 {
 	animationWindow = this;
 
+	if (FISH_COUNT > 15000)
+	{
+		return;
+	}
 
 
 	int argc = 1;
@@ -108,12 +111,8 @@ void AnimationWindow::Run()
 	glutCloseFunc(CloseWindow);
 	glutPassiveMotionFunc(SetMousePos);
 	Init();
-
-	if (!(animationWindow->IsCPU()))
-	{
-		InitParallelSteering(animationWindow->FishShol);
-	}
-
+	
+	AnimationRun = true;
 
 	glutMainLoop();
 
@@ -149,24 +148,28 @@ void Timer(int)
 		SteerSequential(animationWindow->FishShol, FISH_COUNT, mouseX, mouseY);
 		auto finish = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsed = finish - start;
-		std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+		int frame = ((int)(1000 / (elapsed.count() * 1000)));
+		char title[150] = "Shoal of fish ";
+		strcat(title, (" | FPS [ Max: " + std::to_string(frame) + "; Actual: " + std::to_string(std::min(30, frame)) + " ] | Calcualtion time : " + std::to_string(elapsed.count()) + "s ").c_str());
+		glutSetWindowTitle(title);
+
 	}
 	else
 	{
-
 		auto start = std::chrono::high_resolution_clock::now();
-		ParallelSteering(animationWindow->FishShol, mouseX, mouseY);
+		std::string timing = ParallelSteering(animationWindow->FishShol, mouseX, mouseY);
 		auto finish = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> elapsed = finish - start;
-		//system("cls");
-		std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+		int frame = ((int)(1000 / (elapsed.count() * 1000)));
+		char title[150] = "Shoal of fish ";
+		strcat(title, (" | FPS [ Max: " + std::to_string(frame) + "; Actual: " + std::to_string(std::min(30, frame)) + " ]").c_str());
+		strcat(title, timing.c_str());
+		glutSetWindowTitle(title);
 	}
 }
 void CloseWindow()
 {
 	AnimationRun = false;
-	Sleep(100);
-	FinalizeParallelSteering();
 }
 
 void Init()

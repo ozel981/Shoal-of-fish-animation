@@ -3,12 +3,12 @@
 struct FishSettings
 {
 public:
-	float color_R = 1;
-	float color_G = 1;
-	float color_B = 1;
+	float color_R;
+	float color_G;
+	float color_B;
 
-	float speed = 2;
-	float size = 1;
+	float speed;
+	float size;
 
 	bool grouping = true;
 	bool independence = false;

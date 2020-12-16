@@ -1,4 +1,41 @@
-﻿  AnimationWindow.cpp
+﻿  Compiling CUDA source file Source\GPUSteering\ParallelSteering.cu...
+  Compiling CUDA source file Source\Main\main.cu...
+  
+  D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\ShoalOfFishAnimation>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" --use-local-env --cl-version 2015 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64" -x cu  -I"D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\ShoalOfFishAnimation\include\GL" -I"D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\ShoalOfFishAnimation\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\include"     --keep-dir x64\Release -maxrregcount=0  --machine 64 --compile -cudart static     -DGLEW_STATIC -DWIN32 -DWIN64 -DNDEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /FS /Zi  /MD " -o x64\Release\ParallelSteering.cu.obj "D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\ShoalOfFishAnimation\Source\GPUSteering\ParallelSteering.cu" 
+  
+  D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\ShoalOfFishAnimation>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" --use-local-env --cl-version 2015 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64" -x cu  -I"D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\ShoalOfFishAnimation\include\GL" -I"D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\ShoalOfFishAnimation\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\include"     --keep-dir x64\Release -maxrregcount=0  --machine 64 --compile -cudart static     -DGLEW_STATIC -DWIN32 -DWIN64 -DNDEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /O2 /FS /Zi  /MD " -o x64\Release\main.cu.obj "D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\ShoalOfFishAnimation\Source\Main\main.cu" 
+D:/Wojtek/Studia/Semestr5/Procesory graficzne/Shoal-of-fish/Shoal-of-fish-animation/ShoalOfFishAnimation/ShoalOfFishAnimation/Source/GPUSteering/ParallelSteering.cu(22): warning C4005: '__launch_bounds__': macro redefinition
+D:/Wojtek/Studia/Semestr5/Procesory graficzne/Shoal-of-fish/Shoal-of-fish-animation/ShoalOfFishAnimation/ShoalOfFishAnimation/Source/GPUSteering/ParallelSteering.cu(43): warning : attribute does not apply to any entity
+D:/Wojtek/Studia/Semestr5/Procesory graficzne/Shoal-of-fish/Shoal-of-fish-animation/ShoalOfFishAnimation/ShoalOfFishAnimation/Source/GPUSteering/ParallelSteering.cu(220): warning : variable "mallocTime" was declared but never referenced
+D:/Wojtek/Studia/Semestr5/Procesory graficzne/Shoal-of-fish/Shoal-of-fish-animation/ShoalOfFishAnimation/ShoalOfFishAnimation/Source/GPUSteering/ParallelSteering.cu(221): warning : variable "calcualtionTime" was declared but never referenced
+D:/Wojtek/Studia/Semestr5/Procesory graficzne/Shoal-of-fish/Shoal-of-fish-animation/ShoalOfFishAnimation/ShoalOfFishAnimation/Source/GPUSteering/ParallelSteering.cu(22): warning C4005: '__launch_bounds__': macro redefinition
+  main.cu
+D:/Wojtek/Studia/Semestr5/Procesory graficzne/Shoal-of-fish/Shoal-of-fish-animation/ShoalOfFishAnimation/ShoalOfFishAnimation/Source/GPUSteering/ParallelSteering.cu(43): warning : attribute does not apply to any entity
+D:/Wojtek/Studia/Semestr5/Procesory graficzne/Shoal-of-fish/Shoal-of-fish-animation/ShoalOfFishAnimation/ShoalOfFishAnimation/Source/GPUSteering/ParallelSteering.cu(220): warning : variable "mallocTime" was declared but never referenced
+D:/Wojtek/Studia/Semestr5/Procesory graficzne/Shoal-of-fish/Shoal-of-fish-animation/ShoalOfFishAnimation/ShoalOfFishAnimation/Source/GPUSteering/ParallelSteering.cu(221): warning : variable "calcualtionTime" was declared but never referenced
+  ParallelSteering.cu
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(21): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(30): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(34): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(35): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(42): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(51): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(55): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(56): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(63): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(72): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(76): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(77): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(80): warning C4305: '=': truncation from 'double' to 'float'
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\main\../Fish/FishFactory.h(88): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\gpusteering\ParallelSteering.cuh(8): warning C4190: 'ParallelSteering' has C-linkage specified, but returns UDT 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' which is incompatible with C
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xstring(2634): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+D:/Wojtek/Studia/Semestr5/Procesory graficzne/Shoal-of-fish/Shoal-of-fish-animation/ShoalOfFishAnimation/ShoalOfFishAnimation/Source/GPUSteering/ParallelSteering.cu(219): warning C4190: 'ParallelSteering' has C-linkage specified, but returns UDT 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' which is incompatible with C
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xstring(2634): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  AnimationWindow.cpp
 d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\animationwindow\../Fish/FishFactory.h(15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\animationwindow\../Fish/FishFactory.h(19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\animationwindow\../Fish/FishFactory.h(20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
@@ -16,23 +53,37 @@ d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animat
 d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\animationwindow\../Fish/FishFactory.h(77): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\animationwindow\../Fish/FishFactory.h(80): warning C4305: '=': truncation from 'double' to 'float'
 d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\animationwindow\../Fish/FishFactory.h(88): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\animationwindow\../GPUSteering/ParallelSteering.cuh(5): warning C4190: 'ParallelSteering' has C-linkage specified, but returns UDT 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' which is incompatible with C
+d:\wojtek\studia\semestr5\procesory graficzne\shoal-of-fish\shoal-of-fish-animation\shoaloffishanimation\shoaloffishanimation\source\animationwindow\../GPUSteering/ParallelSteering.cuh(8): warning C4190: 'ParallelSteering' has C-linkage specified, but returns UDT 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' which is incompatible with C
   C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xstring(2633): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
 Source\AnimationWindow\AnimationWindow.cpp(33): warning C4190: 'ParallelSteering' has C-linkage specified, but returns UDT 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' which is incompatible with C
   C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xstring(2633): note: see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
-Source\AnimationWindow\AnimationWindow.cpp(104): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-Source\AnimationWindow\AnimationWindow.cpp(153): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+Source\AnimationWindow\AnimationWindow.cpp(111): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+Source\AnimationWindow\AnimationWindow.cpp(160): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(94): note: see declaration of 'strcat'
-Source\AnimationWindow\AnimationWindow.cpp(165): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+Source\AnimationWindow\AnimationWindow.cpp(172): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(94): note: see declaration of 'strcat'
-Source\AnimationWindow\AnimationWindow.cpp(166): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+Source\AnimationWindow\AnimationWindow.cpp(173): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(94): note: see declaration of 'strcat'
-Source\AnimationWindow\AnimationWindow.cpp(217): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-Source\AnimationWindow\AnimationWindow.cpp(218): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+Source\AnimationWindow\AnimationWindow.cpp(219): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+Source\AnimationWindow\AnimationWindow.cpp(220): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Fish.cpp
+Source\Fish\Fish.cpp(79): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+Source\Fish\Fish.cpp(133): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source\Fish\Fish.cpp(155): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+Source\Fish\Fish.cpp(182): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+Source\Fish\Fish.cpp(186): warning C4305: 'argument': truncation from 'double' to 'float'
+Source\Fish\Fish.cpp(205): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
+Source\Fish\Fish.cpp(209): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
+Source\Fish\Fish.cpp(213): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
+Source\Fish\Fish.cpp(217): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
+Source\Fish\Fish.cpp(232): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
+Source\Fish\Fish.cpp(236): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
+Source\Fish\Fish.cpp(240): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
+Source\Fish\Fish.cpp(244): warning C4244: 'return': conversion from 'const double' to 'float', possible loss of data
   Generating code
-  45 of 187 functions (24.1%) were compiled, the rest were copied from previous compilation.
-    19 functions were new in current compilation
-    29 functions had inline decision re-evaluated but remain unchanged
+  29 of 189 functions (15.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   ShoalOfFishAnimation.vcxproj -> D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\x64\Release\ShoalOfFishAnimation.exe
   ShoalOfFishAnimation.vcxproj -> D:\Wojtek\Studia\Semestr5\Procesory graficzne\Shoal-of-fish\Shoal-of-fish-animation\ShoalOfFishAnimation\x64\Release\ShoalOfFishAnimation.pdb (Full PDB)

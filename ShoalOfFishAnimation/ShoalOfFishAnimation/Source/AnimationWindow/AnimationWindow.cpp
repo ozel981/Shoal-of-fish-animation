@@ -31,6 +31,8 @@ void Reshape(int, int);
 void KeyboardInput(unsigned char, int, int);
 
 extern "C" std::string ParallelSteering(Fish* h_fish, float MouseX, float MouseY);
+extern "C" void InitParallelSteering();
+extern "C" void FinalizeParallelSteering();
 
 AnimationWindow* animationWindow = &AnimationWindow(true);
 float mouseX=-MATRIX_HALF_WIDTH, mouseY = -MATRIX_HALF_HEIGHT;
@@ -90,9 +92,14 @@ void AnimationWindow::Run()
 
 	if (FISH_COUNT > 15000)
 	{
+		printf("The count of fish can not be higher than: 15000\n");
 		return;
 	}
 
+	if (!animationWindow->IsCPU())
+	{
+		InitParallelSteering();
+	}
 
 	int argc = 1;
 	char* argv[1] = { "shoal-of-fish" };
@@ -169,6 +176,7 @@ void Timer(int)
 }
 void CloseWindow()
 {
+	FinalizeParallelSteering();
 	AnimationRun = false;
 }
 

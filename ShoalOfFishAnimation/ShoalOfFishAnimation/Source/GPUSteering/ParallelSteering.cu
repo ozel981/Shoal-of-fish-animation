@@ -202,15 +202,28 @@ __global__ void MoveFish(Fish *fish, float mouseX, float mouseY)
 }
 #pragma endregion
 
+Fish* d_fish;
+
+extern "C" void InitParallelSteering()
+{
+	cudaMalloc((void**)&d_fish, FISH_COUNT * sizeof(Fish));
+}
+
+extern "C" void FinalizeParallelSteering()
+{
+	cudaFree(d_fish);
+}
+
+
 extern "C"  std::string ParallelSteering(Fish* h_fish, float MouseX, float MouseY) 
 {
-	Fish* d_fish;
 	double mallocTime = 0;
 	double calcualtionTime = 0;
 
+
+
 	auto start = std::chrono::high_resolution_clock::now();
 	#pragma region HostToDevice
-		cudaMalloc((void**)&d_fish, FISH_COUNT * sizeof(Fish));
 		cudaMemcpy(d_fish, h_fish, FISH_COUNT * sizeof(Fish), cudaMemcpyHostToDevice);
 	#pragma endregion
 	auto finish = std::chrono::high_resolution_clock::now();
@@ -228,7 +241,6 @@ extern "C"  std::string ParallelSteering(Fish* h_fish, float MouseX, float Mouse
 	start = std::chrono::high_resolution_clock::now();
 	#pragma region DeviceToHost
 		cudaMemcpy(h_fish, d_fish, FISH_COUNT * sizeof(Fish), cudaMemcpyDeviceToHost);
-		cudaFree(d_fish);
 	#pragma endregion	
 	finish = std::chrono::high_resolution_clock::now();
 	elapsedMem += (finish - start);

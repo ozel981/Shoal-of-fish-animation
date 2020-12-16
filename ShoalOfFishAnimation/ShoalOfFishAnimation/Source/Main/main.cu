@@ -14,6 +14,7 @@ int main()
 	std::cout << ":";
 	int x;
 	scanf("%d", &x);
+	system("CLS");
 	if (x == 1)
 	{
 		AnimationWindow(isCPU).Run();
